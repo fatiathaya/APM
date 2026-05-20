@@ -1,0 +1,355 @@
+<% const styleAttr=(styles)=> {
+    return `style="${Object.entries(styles).map(([k, v]) => `${k}: ${v}`).join('; ')}"`;
+    };
+    %>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="NeuroCare AI - Screen Result. Alzheimer's risk model projection.">
+        <title>Analysis Result - NeuroCare AI</title>
+        <!-- Tailwind CSS (compiled stylesheet) -->
+        <link href="/css/style.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    </head>
+
+    <body class="bg-body-bg text-primary-dark font-outfit antialiased">
+
+        <!-- Navbar -->
+        <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
+            <div class="max-w-6xl mx-auto px-5 flex items-center justify-between">
+                <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
+                    <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
+                </a>
+                <div class="hidden md:flex items-center gap-6">
+                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                        href="/">Home</a>
+                    <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
+                        href="/predict">Prediction</a>
+                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                        href="/#about">About</a>
+                    <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
+                </div>
+                <div class="md:hidden">
+                    <a class="btn-primary-gradient px-4 py-2 rounded-lg text-xs" href="/predict">Start Screening</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Container -->
+        <div class="pt-28 pb-16 bg-gradient-to-b from-light-blue-bg to-body-bg/0 min-h-screen">
+            <div class="max-w-6xl mx-auto px-5">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 md:p-8">
+
+                    <!-- Header with back arrow -->
+                    <div class="flex items-center gap-2.5 mb-6">
+                        <a href="/predict"
+                            class="w-8 h-8 rounded-full border border-slate-200 hover:bg-slate-50 flex items-center justify-center text-slate-500 hover:text-secondary-blue transition text-xs">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        <span class="text-slate-400 font-semibold text-xs">Back to Screening Form</span>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center gap-8 lg:gap-12">
+                        <!-- Left: Gauge Representation -->
+                        <div class="w-full md:w-5/12 flex justify-center text-center">
+                            <div class="result-gauge-container scale-95 md:scale-100">
+                                <svg class="result-gauge-svg" width="200" height="200" viewBox="0 0 220 220">
+                                    <circle class="gauge-bg" cx="110" cy="110" r="95"></circle>
+                                    <circle class="gauge-fill" id="gaugeFillCircle" cx="110" cy="110" r="95"
+                                        stroke="<%= isHighRisk ? '#e11d48' : '#0d9488' %>"
+                                        stroke-dasharray="<%= circumference %>"
+                                        stroke-dashoffset="<%= circumference %>"></circle>
+                                </svg>
+                                <div class="gauge-percentage">
+                                    <div
+                                        class="gauge-val text-3xl sm:text-4xl font-extrabold text-slate-900 leading-none">
+                                        <%= probability_percentage %>%
+                                    </div>
+                                    <div class="gauge-label text-[9px] text-slate-400 font-semibold mt-1">Risk
+                                        Probability</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: Status Banner & Details -->
+                        <div class="w-full md:w-7/12 text-center md:text-left">
+                            <span
+                                class="inline-flex items-center bg-blue-50 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider">
+                                XGBoost Analysis Output
+                            </span>
+
+                            <div class="mb-4">
+                                <% if (isHighRisk) { %>
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-4.5 py-1.5 rounded-full text-sm font-bold bg-rose-50 text-rose-600 border border-rose-100 shadow-sm">
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                        <%= statusText %>
+                                    </span>
+                                    <% } else { %>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 px-4.5 py-1.5 rounded-full text-sm font-bold bg-teal-50 text-teal-600 border border-teal-100 shadow-sm">
+                                            <i class="bi bi-check-circle-fill"></i>
+                                            <%= statusText %>
+                                        </span>
+                                        <% } %>
+                            </div>
+
+                            <p class="text-slate-500 leading-relaxed text-xs sm:text-sm">
+                                Based on the 18 parameters processed through the XGBoost classification model, the
+                                subject shows a <strong>
+                                    <%= probability_percentage %>%
+                                </strong> risk score. This model calculates odds indices using weighted clinical
+                                parameters.
+                            </p>
+
+                            <div class="flex flex-wrap gap-2.5 mt-5 justify-center md:justify-start">
+                                <button onclick="window.print();"
+                                    class="btn-outline-custom py-2 px-4.5 rounded-lg text-xs flex items-center gap-2">
+                                    <i class="bi bi-printer"></i>Print Report
+                                </button>
+                                <a href="/predict"
+                                    class="btn-primary-gradient py-2 px-4.5 rounded-lg text-xs flex items-center gap-2">
+                                    <i class="bi bi-arrow-repeat"></i>Retake Test
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Divider -->
+                    <hr class="my-6 border-slate-100">
+
+                    <!-- Main Risk Factors Analysis -->
+                    <h4 class="text-lg font-bold text-slate-900 mb-5 flex items-center gap-2">
+                        <i class="bi bi-graph-up-arrow text-secondary-blue"></i>Primary Risk Drivers Breakdown
+                    </h4>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+
+                        <!-- MMSE factor -->
+                        <% let mmseStatus="" ; let mmseColor="" ; let mmseIcon="" ; let mmsePercent=(mmse / 30) * 100;
+                            if (mmse>= 27) {
+                            mmseStatus = "Normal Cognitive (Excellent)";
+                            mmseColor = "#0d9488";
+                            mmseIcon = "bi-shield-check text-teal-600 bg-teal-50";
+                            } else if (mmse >= 24) {
+                            mmseStatus = "Mild Cognitive Deficit (Borderline)";
+                            mmseColor = "#eab308";
+                            mmseIcon = "bi-shield-exclamation text-yellow-600 bg-yellow-50";
+                            } else {
+                            mmseStatus = "Cognitive Impairment (High Risk Impact)";
+                            mmseColor = "#e11d48";
+                            mmseIcon = "bi-shield-x text-rose-600 bg-rose-50";
+                            }
+                            %>
+                            <div
+                                class="flex items-center gap-3.5 p-4 rounded-xl border border-slate-200/70 bg-white hover:translate-x-1 transition duration-200">
+                                <div
+                                    class="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 <%= mmseIcon %>">
+                                </div>
+                                <div class="grow">
+                                    <div class="font-semibold text-xs text-slate-800 mb-0.5">MMSE Score (Mini-Mental
+                                        State Exam)</div>
+                                    <span class="text-[10px] font-semibold" <%- styleAttr({ color: mmseColor }) %>><%=
+                                            mmse %>/30 - <%= mmseStatus %></span>
+                                    <div class="h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                                        <div class="h-full rounded-full transition-all duration-1000" <%- styleAttr({
+                                            width: mmsePercent + '%' , 'background-color' : mmseColor }) %>></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ADL factor -->
+                            <% let adlStatus="" ; let adlColor="" ; let adlIcon="" ; let adlPercent=(adl / 10) * 100; if
+                                (adl>= 7.5) {
+                                adlStatus = "Fully Independent (Low Impact)";
+                                adlColor = "#0d9488";
+                                adlIcon = "bi-heart-pulse-fill text-teal-600 bg-teal-50";
+                                } else if (adl >= 5.0) {
+                                adlStatus = "Moderate Dependence (Caution)";
+                                adlColor = "#eab308";
+                                adlIcon = "bi-heart-pulse-fill text-yellow-600 bg-yellow-50";
+                                } else {
+                                adlStatus = "Severe Dependence (High Risk Impact)";
+                                adlColor = "#e11d48";
+                                adlIcon = "bi-heart-pulse-fill text-rose-600 bg-rose-50";
+                                }
+                                %>
+                                <div
+                                    class="flex items-center gap-3.5 p-4 rounded-xl border border-slate-200/70 bg-white hover:translate-x-1 transition duration-200">
+                                    <div
+                                        class="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 <%= adlIcon %>">
+                                    </div>
+                                    <div class="grow">
+                                        <div class="font-semibold text-xs text-slate-800 mb-0.5">ADL Score (Activities
+                                            of Daily Living)</div>
+                                        <span class="text-[10px] font-semibold" <%- styleAttr({ color: adlColor }) %>>
+                                            <%= adl %>/10 - <%= adlStatus %></span>
+                                        <div class="h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                                            <div class="h-full rounded-full transition-all duration-1000" <%-
+                                                styleAttr({ width: adlPercent + '%' , 'background-color' : adlColor })
+                                                %>></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Sleep Quality factor -->
+                                <% let sleepPercent=(sleepQuality / 10) * 100; let sleepStatus="" ; let sleepColor="" ;
+                                    let sleepIcon="" ; if (sleepQuality>= 7) {
+                                    sleepStatus = "Healthy Restorative Sleep";
+                                    sleepColor = "#0d9488";
+                                    sleepIcon = "bi-moon-stars-fill text-teal-600 bg-teal-50";
+                                    } else if (sleepQuality >= 5) {
+                                    sleepStatus = "Sub-optimal Sleep Quality";
+                                    sleepColor = "#eab308";
+                                    sleepIcon = "bi-moon-stars-fill text-yellow-600 bg-yellow-50";
+                                    } else {
+                                    sleepStatus = "Poor Sleep Hygiene (Elevates Risk)";
+                                    sleepColor = "#e11d48";
+                                    sleepIcon = "bi-moon-stars-fill text-rose-600 bg-rose-50";
+                                    }
+                                    %>
+                                    <div
+                                        class="flex items-center gap-3.5 p-4 rounded-xl border border-slate-200/70 bg-white hover:translate-x-1 transition duration-200">
+                                        <div
+                                            class="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 <%= sleepIcon %>">
+                                        </div>
+                                        <div class="grow">
+                                            <div class="font-semibold text-xs text-slate-800 mb-0.5">Sleep Quality Index
+                                            </div>
+                                            <span class="text-[10px] font-semibold" <%- styleAttr({ color: sleepColor })
+                                                %>><%= sleepQuality %>/10 - <%= sleepStatus %></span>
+                                            <div class="h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                                                <div class="h-full rounded-full transition-all duration-1000" <%-
+                                                    styleAttr({ width: sleepPercent + '%' , 'background-color' :
+                                                    sleepColor }) %>></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Family History factor -->
+                                    <% let familyStatus="" ; let familyColor="" ; let familyIcon="" ; if
+                                        (familyHistory===0) { familyStatus="No Genetic History Identified" ;
+                                        familyColor="#0d9488" ; familyIcon="bi-people-fill text-teal-600 bg-teal-50" ; }
+                                        else { familyStatus="Genetic Predisposition Present" ; familyColor="#e11d48" ;
+                                        familyIcon="bi-people-fill text-rose-600 bg-rose-50" ; } %>
+                                        <div
+                                            class="flex items-center gap-3.5 p-4 rounded-xl border border-slate-200/70 bg-white hover:translate-x-1 transition duration-200">
+                                            <div
+                                                class="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0 <%= familyIcon %>">
+                                            </div>
+                                            <div class="grow">
+                                                <div class="font-semibold text-xs text-slate-800 mb-0.5">Family Genetic
+                                                    History</div>
+                                                <span class="text-[10px] font-semibold" <%- styleAttr({ color:
+                                                    familyColor }) %>><%= familyStatus %></span>
+                                                <div class="h-1.5 bg-slate-100 rounded-full mt-2 overflow-hidden">
+                                                    <div class="h-full rounded-full transition-all duration-1000" <%-
+                                                        styleAttr({ width: '100%' , 'background-color' : familyColor })
+                                                        %>></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                    </div>
+
+                    <!-- Recommendations Card -->
+                    <div class="bg-slate-50 border border-slate-200/40 p-5 md:p-6 rounded-xl mt-8">
+                        <h5 class="font-bold text-slate-900 text-sm mb-3 flex items-center gap-2">
+                            <i class="bi bi-clipboard2-pulse-fill text-secondary-blue"></i>Recommended Actions
+                        </h5>
+                        <ul class="list-disc pl-5 space-y-1.5 text-slate-600 text-xs">
+                            <% if (isHighRisk) { %>
+                                <li><strong>Schedule Clinical Evaluation:</strong> We highly advise consulting a
+                                    neurologist or medical professional for comprehensive cognitive mapping.</li>
+                                <li><strong>Brain Training:</strong> Engage in stimulating cognitive activities
+                                    (puzzles, reading, memory tasks) to support cognitive resilience.</li>
+                                <li><strong>Cardiovascular Regulation:</strong> Ensure blood pressure and glucose levels
+                                    are strictly managed as they directly impact micro-vascular neural health.</li>
+                                <li><strong>Sleep Optimization:</strong> Prioritize structural sleep routines (7-8
+                                    hours) to assist metabolic clearance in brain cells.</li>
+                                <% } else { %>
+                                    <li><strong>Maintain Active Lifestyle:</strong> Keep performing at least 150 minutes
+                                        of moderate aerobic exercises weekly.</li>
+                                    <li><strong>Mediterranean/Balanced Diet:</strong> Incorporate antioxidants, omega-3
+                                        fatty acids, and green vegetables.</li>
+                                    <li><strong>Routine Checkups:</strong> Perform memory evaluations annually or if
+                                        subjective complaints arise.</li>
+                                    <li><strong>Maintain Social Ties:</strong> Active social interaction supports
+                                        neuro-protective cognitive reserves.</li>
+                                    <% } %>
+                        </ul>
+                    </div>
+
+                    <!-- Medical Disclaimer -->
+                    <div class="border-l-4 border-secondary-blue bg-sky-50/70 p-5 rounded-r-xl mt-6">
+                        <div class="flex items-center gap-2 font-bold text-slate-800 text-xs mb-1.5">
+                            <i class="bi bi-info-circle-fill text-secondary-blue"></i> Medical Disclaimer Notice
+                        </div>
+                        <p class="text-slate-500 text-[10px] leading-relaxed">
+                            NeuroCare AI Alzheimer screening is powered by a predictive algorithm designed to calculate
+                            potential statistics based on study profiles. It does not replace physical brain scans (MRI,
+                            PET), cerebrospinal fluid assays, or diagnostic exams administered by physicians. Always
+                            contact your healthcare provider with questions concerning medical disorders.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-slate-950 text-slate-400 py-12">
+            <div class="max-w-6xl mx-auto px-5">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left mb-10">
+                    <div>
+                        <a class="font-extrabold text-xl text-white flex items-center gap-2 mb-3" href="/">
+                            <i class="bi bi-activity text-sky-400"></i> NeuroCare AI
+                        </a>
+                        <p class="text-slate-400 text-sm max-w-xs leading-relaxed">
+                            Early detection systems utilizing modern artificial intelligence to advance healthcare
+                            outcomes.
+                        </p>
+                    </div>
+                    <div>
+                        <h5 class="text-white font-bold text-sm mb-3">Links</h5>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="/" class="hover:text-white transition-all">Home</a></li>
+                            <li><a href="/predict" class="hover:text-white transition-all">Screening Form</a></li>
+                            <li><a href="/#about" class="hover:text-white transition-all">About Dataset</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-white font-bold text-sm mb-3">Universitas Andalas</h5>
+                        <p class="text-slate-400 text-sm mb-0.5">Fakultas Teknologi Informasi</p>
+                        <p class="text-slate-400 text-sm">Kelompok APM &copy; 2026</p>
+                    </div>
+                </div>
+                <hr class="border-slate-800 mb-6">
+                <div class="text-center text-slate-500 text-xs">
+                    &copy; 2026 NeuroCare AI. All Rights Reserved. Created by Kelompok APM - Universitas Andalas.
+                </div>
+            </div>
+        </footer>
+
+        <!-- Inline JS to animate circular gauge -->
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const gaugeFill = document.getElementById('gaugeFillCircle');
+                if (gaugeFill) {
+                    const circumference = parseFloat("<%= circumference %>");
+                    const offset = parseFloat("<%= dashoffset %>");
+
+                    // Animate to target offset
+                    setTimeout(() => {
+                        gaugeFill.style.strokeDashoffset = offset;
+                    }, 150);
+                }
+            });
+        </script>
+    </body>
+
+    </html>

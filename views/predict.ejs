@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="NeuroCare AI - Alzheimer Prediction Input Form. Run XGBoost predictive screening model.">
+    <title>Risk screening form - NeuroCare AI</title>
+    <!-- Tailwind CSS (compiled stylesheet) -->
+    <link href="/css/style.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body class="bg-body-bg text-primary-dark font-outfit antialiased">
+
+    <!-- Navbar -->
+    <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
+        <div class="max-w-6xl mx-auto px-5 flex items-center justify-between">
+            <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
+                <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
+            </a>
+            <div class="hidden md:flex items-center gap-6">
+                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/">Home</a>
+                <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
+                    href="/predict">Prediction</a>
+                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                    href="/#about">About</a>
+                <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
+            </div>
+            <div class="md:hidden">
+                <a class="btn-primary-gradient px-4 py-2 rounded-lg text-xs" href="/predict">Start Screening</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="pt-28 pb-6 bg-gradient-to-b from-light-blue-bg to-body-bg/0">
+        <div class="max-w-6xl mx-auto px-5 text-center">
+            <span
+                class="inline-flex items-center bg-blue-50 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider">
+                Predictive Analysis
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Alzheimer's Early Screening</h2>
+            <p class="text-slate-500 max-w-md mx-auto text-sm leading-relaxed">Please fill out the following clinical
+                assessment. Make sure the measurements are accurate for precise calculations.</p>
+        </div>
+    </div>
+
+    <!-- Form Section -->
+    <section class="max-w-6xl mx-auto px-5 pb-16">
+        <form id="alzheimerPredictionForm" action="/result" method="POST">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+
+                <!-- Group 1: Demographic & Genetics -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <i class="bi bi-person-badge-fill text-secondary-blue text-base"></i> Demographic & Genetics
+                        </h3>
+                    </div>
+                    <div class="p-5 grow flex flex-col justify-start gap-5">
+                        <div>
+                            <label for="age" class="block font-semibold text-slate-700 text-xs mb-1.5">Age
+                                (Tahun)</label>
+                            <input type="number"
+                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                id="age" name="age" min="50" max="90" value="65" required>
+                            <div class="text-[10px] text-slate-400 mt-1">Range valid: 50 - 90 tahun.</div>
+                        </div>
+                        <div>
+                            <label for="gender" class="block font-semibold text-slate-700 text-xs mb-1.5">Gender</label>
+                            <select
+                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                id="gender" name="gender" required>
+                                <option value="0">Female</option>
+                                <option value="1">Male</option>
+                            </select>
+                            <div class="text-[10px] text-slate-400 mt-1">Biological gender.</div>
+                        </div>
+                        <div>
+                            <label for="familyHistory" class="block font-semibold text-slate-700 text-xs mb-1.5">Family
+                                History of Alzheimer's</label>
+                            <select
+                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                id="familyHistory" name="familyHistory" required>
+                                <option value="0">No (Tidak ada riwayat keluarga)</option>
+                                <option value="1">Yes (Ada riwayat keluarga dekat)</option>
+                            </select>
+                            <div class="text-[10px] text-slate-400 mt-1">Close relatives diagnosed with Alzheimer's
+                                disease.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 2: Cognitive & Functional Assessments -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <i class="bi bi-brain text-secondary-blue text-base"></i> Cognitive & Functional Assessments
+                        </h3>
+                    </div>
+                    <div class="p-5 grow flex flex-col justify-start gap-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="mmse" class="block font-semibold text-slate-700 text-xs mb-1.5">MMSE
+                                    Score</label>
+                                <input type="number"
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="mmse" name="mmse" min="0" max="30" value="27" required>
+                                <div class="text-[10px] text-slate-400 mt-1">Mini-Mental State Exam (0 - 30).</div>
+                            </div>
+                            <div>
+                                <label for="memoryComplaints"
+                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Memory Complaints</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="memoryComplaints" name="memoryComplaints" required>
+                                    <option value="0">No (Tidak ada keluhan memori)</option>
+                                    <option value="1">Yes (Mengalami keluhan memori)</option>
+                                </select>
+                                <div class="text-[10px] text-slate-400 mt-1">Subjective feelings of memory decline.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <div
+                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-600">ADL Score (Activities of Daily
+                                        Living)</span>
+                                    <span id="valAdl"
+                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">8.5</span>
+                                </div>
+                                <input type="range"
+                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
+                                    id="adl" name="adl" min="0" max="10" step="0.1" value="8.5"
+                                    data-value-display="valAdl">
+                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
+                                    <span>0 (Fully Dependent)</span>
+                                    <span>10 (Fully Independent)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <div
+                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-600">Functional Assessment
+                                        Score</span>
+                                    <span id="valFunc"
+                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">7.8</span>
+                                </div>
+                                <input type="range"
+                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
+                                    id="functionalAssessment" name="functionalAssessment" min="0" max="10" step="0.1"
+                                    value="7.8" data-value-display="valFunc">
+                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
+                                    <span>0 (Severe Impairment)</span>
+                                    <span>10 (No Impairment)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 3: Physical Health & Medical Conditions -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <i class="bi bi-heart-pulse-fill text-secondary-blue text-base"></i> Medical History & Body
+                            Composition
+                        </h3>
+                    </div>
+                    <div class="p-5 grow flex flex-col justify-start gap-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="bmi" class="block font-semibold text-slate-700 text-xs mb-1.5">BMI (Body
+                                    Mass Index)</label>
+                                <input type="number"
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="bmi" name="bmi" min="15" max="40" step="0.1" value="23.5" required>
+                                <div class="text-[10px] text-slate-400 mt-1">Range valid: 15.0 - 40.0.</div>
+                            </div>
+                            <div>
+                                <label for="cholesterolTotal" class="block font-semibold text-slate-700 text-xs mb-1.5">Total Cholesterol (mg/dL)</label>
+                                <input type="number"
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>
+                                <div class="text-[10px] text-slate-400 mt-1">Normal: 150-200 mg/dL.</div>
+                            </div>
+                            <div>
+                                <label for="systolicBP" class="block font-semibold text-slate-700 text-xs mb-1.5">Systolic Blood Pressure</label>
+                                <input type="number"
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="systolicBP" name="systolicBP" min="90" max="180" value="120" required>
+                                <div class="text-[10px] text-slate-400 mt-1">Normal: 90-120 mmHg.</div>
+                            </div>
+                            <div>
+                                <label for="diastolicBP" class="block font-semibold text-slate-700 text-xs mb-1.5">Diastolic Blood Pressure</label>
+                                <input type="number"
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="diastolicBP" name="diastolicBP" min="60" max="120" value="80" required>
+                                <div class="text-[10px] text-slate-400 mt-1">Normal: 60-80 mmHg.</div>
+                            </div>
+                            <div>
+                                <label for="diabetes"
+                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Diabetes</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="diabetes" name="diabetes" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="hypertension"
+                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Hypertension</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="hypertension" name="hypertension" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cardiovascular"
+                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Cardiovascular
+                                    Disease</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="cardiovascular" name="cardiovascular" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="depression"
+                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Depression</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="depression" name="depression" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="headInjury" class="block font-semibold text-slate-700 text-xs mb-1.5">Head
+                                    Injury History</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="headInjury" name="headInjury" required>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="behavioralProblems" class="block font-semibold text-slate-700 text-xs mb-1.5">Behavioral Problems</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="behavioralProblems" name="behavioralProblems" required>
+                                    <option value="0">No (Tidak ada masalah perilaku)</option>
+                                    <option value="1">Yes (Ada masalah perilaku)</option>
+                                </select>
+                                <div class="text-[10px] text-slate-400 mt-1">Agitation, aggression, or mood changes.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group 4: Lifestyle & Habits -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
+                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
+                            <i class="bi bi-lungs-fill text-secondary-blue text-base"></i> Lifestyle Habits & Sleep
+                        </h3>
+                    </div>
+                    <div class="p-5 grow flex flex-col justify-start gap-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="smoking" class="block font-semibold text-slate-700 text-xs mb-1.5">Smoking
+                                    Status</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="smoking" name="smoking" required>
+                                    <option value="0">No (Non-smoker)</option>
+                                    <option value="1">Yes (Active Smoker)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="alcohol" class="block font-semibold text-slate-700 text-xs mb-1.5">Alcohol
+                                    Consumption</label>
+                                <select
+                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
+                                    id="alcohol" name="alcohol" required>
+                                    <option value="0">No / Occasional</option>
+                                    <option value="1">Yes / Regular</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="w-full">
+                            <div
+                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-600">Physical Activity
+                                        (Hours/Week)</span>
+                                    <span id="valPhysical"
+                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">4.5</span>
+                                </div>
+                                <input type="range"
+                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
+                                    id="physicalActivity" name="physicalActivity" min="0" max="10" step="0.5"
+                                    value="4.5" data-value-display="valPhysical">
+                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
+                                    <span>0 Hours</span>
+                                    <span>10+ Hours</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+                            <div
+                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-600">Sleep Quality</span>
+                                    <span id="valSleep"
+                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">7</span>
+                                </div>
+                                <input type="range"
+                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
+                                    id="sleepQuality" name="sleepQuality" min="1" max="10" step="1" value="7"
+                                    data-value-display="valSleep">
+                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
+                                    <span>1 (Poor)</span>
+                                    <span>10 (Excellent)</span>
+                                </div>
+                            </div>
+
+                            <div
+                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
+                                <div class="flex items-center justify-between mb-1.5">
+                                    <span class="text-[11px] font-bold text-slate-600">Diet Quality</span>
+                                    <span id="valDiet"
+                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">6</span>
+                                </div>
+                                <input type="range"
+                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
+                                    id="dietQuality" name="dietQuality" min="1" max="10" step="1" value="6"
+                                    data-value-display="valDiet">
+                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
+                                    <span>1 (Unhealthy)</span>
+                                    <span>10 (Healthy)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button Container -->
+                <div class="lg:col-span-2 text-center mt-5">
+                    <button type="submit"
+                        class="btn-primary-gradient py-3 px-8 rounded-xl text-base shadow-md flex items-center gap-2 mx-auto">
+                        <i class="bi bi-shield-check text-lg"></i>Analyze Profile
+                    </button>
+                    <p class="text-slate-400 mt-2.5 text-[11px]"><i class="bi bi-lock-fill mr-1"></i>Your input data is
+                        processed locally on the server and is not permanently stored.</p>
+                </div>
+
+            </div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-12">
+        <div class="max-w-6xl mx-auto px-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left mb-10">
+                <div>
+                    <a class="font-extrabold text-xl text-white flex items-center gap-2 mb-3" href="/">
+                        <i class="bi bi-activity text-sky-400"></i> NeuroCare AI
+                    </a>
+                    <p class="text-slate-400 text-sm max-w-xs leading-relaxed">
+                        Early detection systems utilizing modern artificial intelligence to advance healthcare outcomes.
+                    </p>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm mb-3">Links</h5>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-white transition-all">Home</a></li>
+                        <li><a href="/predict" class="hover:text-white transition-all">Screening Form</a></li>
+                        <li><a href="/#about" class="hover:text-white transition-all">About Dataset</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm mb-3">Universitas Andalas</h5>
+                    <p class="text-slate-400 text-sm mb-0.5">Fakultas Teknologi Informasi</p>
+                    <p class="text-slate-400 text-sm">Kelompok APM &copy; 2026</p>
+                </div>
+            </div>
+            <hr class="border-slate-800 mb-6">
+            <div class="text-center text-slate-500 text-xs">
+                &copy; 2026 NeuroCare AI. All Rights Reserved. Created by Kelompok APM - Universitas Andalas.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JS file -->
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
