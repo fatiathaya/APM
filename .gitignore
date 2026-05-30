@@ -4,3 +4,4 @@ __pycache__/
 learning_state.json
 .DS_Store
 Thumbs.db
+/env

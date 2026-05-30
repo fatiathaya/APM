@@ -217,6 +217,71 @@
     font-size: 0.85rem;
     border: 1px solid rgba(37, 99, 235, 0.15);
   }
+
+  .form-field {
+    @apply w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm bg-white text-slate-800 shadow-sm;
+    @apply focus:outline-none focus:border-secondary-blue focus:ring-4 focus:ring-blue-100 transition duration-150;
+  }
+
+  .form-label {
+    @apply block font-semibold text-slate-700 text-sm mb-1.5;
+  }
+
+  .form-hint {
+    @apply text-[11px] text-slate-400 mt-1 leading-relaxed;
+  }
+
+  .predict-shell {
+    @apply grid grid-cols-1 xl:grid-cols-[280px_minmax(0,1fr)] gap-6 xl:gap-8 items-start;
+  }
+
+  .predict-sidebar {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm p-4 xl:p-5 xl:sticky xl:top-24;
+  }
+
+  .predict-step-btn {
+    @apply w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left transition-all duration-200 border border-transparent;
+  }
+
+  .predict-step-btn.is-active {
+    @apply bg-blue-50 border-blue-100 text-primary-blue shadow-sm;
+  }
+
+  .predict-step-btn:not(.is-active):hover {
+    @apply bg-slate-50;
+  }
+
+  .predict-panel {
+    @apply hidden;
+  }
+
+  .predict-panel.is-active {
+    @apply block animate-fade-in;
+  }
+
+  .predict-card {
+    @apply bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden;
+  }
+
+  .predict-card-header {
+    @apply flex items-center justify-between gap-3 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-5 py-4;
+  }
+
+  .predict-card-body {
+    @apply p-5 md:p-6 lg:p-7;
+  }
+
+  .predict-grid-2 {
+    @apply grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-5;
+  }
+
+  .predict-grid-3 {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5;
+  }
+
+  .predict-action-bar {
+    @apply sticky bottom-4 z-40 mt-6 bg-white/90 backdrop-blur-md border border-slate-200 rounded-2xl shadow-medium px-4 py-4 md:px-6;
+  }
 }
 
 @keyframes fadeInUp {

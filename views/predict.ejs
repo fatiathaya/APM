@@ -1,21 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
         content="NeuroCare AI - Alzheimer Prediction Input Form. Run XGBoost predictive screening model.">
-    <title>Risk screening form - NeuroCare AI</title>
-    <!-- Tailwind CSS (compiled stylesheet) -->
+    <title>Screening Form - NeuroCare AI</title>
     <link href="/css/style.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
-<body class="bg-body-bg text-primary-dark font-outfit antialiased">
+<body class="bg-body-bg text-primary-dark font-outfit antialiased overflow-x-hidden">
 
-    <!-- Navbar -->
     <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
         <div class="page-container-wide flex items-center justify-between">
             <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
@@ -29,391 +26,343 @@
                     href="/database">Riwayat</a>
                 <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
                     href="/#about">About</a>
-                <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
             </div>
             <div class="md:hidden">
-                <a class="btn-primary-gradient px-4 py-2 rounded-lg text-xs" href="/predict">Start Screening</a>
+                <a class="text-secondary-blue text-sm font-semibold" href="/database">Riwayat</a>
             </div>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <div class="pt-28 pb-6 hero-bg">
-        <div class="page-container-wide text-center">
-            <span
-                class="inline-flex items-center bg-blue-50 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider">
-                Predictive Analysis
-            </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Alzheimer's Early Screening</h2>
-            <p class="text-slate-500 max-w-md mx-auto text-sm leading-relaxed">Please fill out the following clinical
-                assessment. Make sure the measurements are accurate for precise calculations.</p>
+    <header class="pt-24 pb-8 hero-bg border-b border-slate-100/80">
+        <div class="page-container-wide">
+            <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                <div class="max-w-3xl">
+                    <span
+                        class="inline-flex items-center gap-1.5 bg-white/80 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider border border-blue-100">
+                        <i class="bi bi-clipboard2-pulse"></i> Predictive Analysis
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                        Alzheimer's Early Screening
+                    </h1>
+                    <p class="text-slate-500 text-sm md:text-base leading-relaxed">
+                        Isi 4 langkah penilaian klinis di bawah. Form dirancang responsif agar mudah digunakan di desktop maupun mobile.
+                    </p>
+                </div>
+                <div class="w-full lg:w-80 bg-white/80 backdrop-blur rounded-2xl border border-slate-100 p-4 shadow-sm">
+                    <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
+                        <span id="predictProgressText">Langkah 1 dari 4</span>
+                        <span id="predictCurrentStepLabel">Demografi & Genetik</span>
+                    </div>
+                    <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
+                        <div id="predictProgressBar" class="h-full bg-gradient-to-r from-primary-blue to-secondary-blue rounded-full transition-all duration-300" style="width: 25%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Form Section -->
-    <section class="page-container-wide pb-16">
-        <form id="alzheimerPredictionForm" action="/result" method="POST">
-            <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+    <section class="page-container-wide py-8 pb-20">
+        <form id="alzheimerPredictionForm" action="/result" method="POST" class="predict-shell">
 
-                <!-- Group 1: Demographic & Genetics -->
-                <div
-                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
-                            <i class="bi bi-person-badge-fill text-secondary-blue text-base"></i> Demographic & Genetics
-                        </h3>
-                    </div>
-                    <div class="p-5 grow flex flex-col justify-start gap-5">
-                        <div>
-                            <label for="age" class="block font-semibold text-slate-700 text-xs mb-1.5">Age
-                                (Tahun)</label>
-                            <input type="number"
-                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                id="age" name="age" min="50" max="90" value="65" required>
-                            <div class="text-[10px] text-slate-400 mt-1">Range valid: 50 - 90 tahun.</div>
-                        </div>
-                        <div>
-                            <label for="gender" class="block font-semibold text-slate-700 text-xs mb-1.5">Gender</label>
-                            <select
-                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                id="gender" name="gender" required>
-                                <option value="0">Female</option>
-                                <option value="1">Male</option>
-                            </select>
-                            <div class="text-[10px] text-slate-400 mt-1">Biological gender.</div>
-                        </div>
-                        <div>
-                            <label for="familyHistory" class="block font-semibold text-slate-700 text-xs mb-1.5">Family
-                                History of Alzheimer's</label>
-                            <select
-                                class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                id="familyHistory" name="familyHistory" required>
-                                <option value="0">No (Tidak ada riwayat keluarga)</option>
-                                <option value="1">Yes (Ada riwayat keluarga dekat)</option>
-                            </select>
-                            <div class="text-[10px] text-slate-400 mt-1">Close relatives diagnosed with Alzheimer's
-                                disease.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Group 2: Cognitive & Functional Assessments -->
-                <div
-                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
-                            <i class="bi bi-brain text-secondary-blue text-base"></i> Cognitive & Functional Assessments
-                        </h3>
-                    </div>
-                    <div class="p-5 grow flex flex-col justify-start gap-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="mmse" class="block font-semibold text-slate-700 text-xs mb-1.5">MMSE
-                                    Score</label>
-                                <input type="number"
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="mmse" name="mmse" min="0" max="30" value="27" required>
-                                <div class="text-[10px] text-slate-400 mt-1">Mini-Mental State Exam (0 - 30).</div>
-                            </div>
-                            <div>
-                                <label for="memoryComplaints"
-                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Memory Complaints</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="memoryComplaints" name="memoryComplaints" required>
-                                    <option value="0">No (Tidak ada keluhan memori)</option>
-                                    <option value="1">Yes (Mengalami keluhan memori)</option>
-                                </select>
-                                <div class="text-[10px] text-slate-400 mt-1">Subjective feelings of memory decline.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div
-                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-600">ADL Score (Activities of Daily
-                                        Living)</span>
-                                    <span id="valAdl"
-                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">8.5</span>
-                                </div>
-                                <input type="range"
-                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
-                                    id="adl" name="adl" min="0" max="10" step="0.1" value="8.5"
-                                    data-value-display="valAdl">
-                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
-                                    <span>0 (Fully Dependent)</span>
-                                    <span>10 (Fully Independent)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div
-                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-600">Functional Assessment
-                                        Score</span>
-                                    <span id="valFunc"
-                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">7.8</span>
-                                </div>
-                                <input type="range"
-                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
-                                    id="functionalAssessment" name="functionalAssessment" min="0" max="10" step="0.1"
-                                    value="7.8" data-value-display="valFunc">
-                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
-                                    <span>0 (Severe Impairment)</span>
-                                    <span>10 (No Impairment)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Group 3: Physical Health & Medical Conditions -->
-                <div
-                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
-                            <i class="bi bi-heart-pulse-fill text-secondary-blue text-base"></i> Medical History & Body
-                            Composition
-                        </h3>
-                    </div>
-                    <div class="p-5 grow flex flex-col justify-start gap-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="bmi" class="block font-semibold text-slate-700 text-xs mb-1.5">BMI (Body
-                                    Mass Index)</label>
-                                <input type="number"
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="bmi" name="bmi" min="15" max="40" step="0.1" value="23.5" required>
-                                <div class="text-[10px] text-slate-400 mt-1">Range valid: 15.0 - 40.0.</div>
-                            </div>
-                            <div>
-                                <label for="cholesterolTotal" class="block font-semibold text-slate-700 text-xs mb-1.5">Total Cholesterol (mg/dL)</label>
-                                <input type="number"
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>
-                                <div class="text-[10px] text-slate-400 mt-1">Normal: 150-200 mg/dL.</div>
-                            </div>
-                            <div>
-                                <label for="systolicBP" class="block font-semibold text-slate-700 text-xs mb-1.5">Systolic Blood Pressure</label>
-                                <input type="number"
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="systolicBP" name="systolicBP" min="90" max="180" value="120" required>
-                                <div class="text-[10px] text-slate-400 mt-1">Normal: 90-120 mmHg.</div>
-                            </div>
-                            <div>
-                                <label for="diastolicBP" class="block font-semibold text-slate-700 text-xs mb-1.5">Diastolic Blood Pressure</label>
-                                <input type="number"
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="diastolicBP" name="diastolicBP" min="60" max="120" value="80" required>
-                                <div class="text-[10px] text-slate-400 mt-1">Normal: 60-80 mmHg.</div>
-                            </div>
-                            <div>
-                                <label for="diabetes"
-                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Diabetes</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="diabetes" name="diabetes" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="hypertension"
-                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Hypertension</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="hypertension" name="hypertension" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="cardiovascular"
-                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Cardiovascular
-                                    Disease</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="cardiovascular" name="cardiovascular" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="depression"
-                                    class="block font-semibold text-slate-700 text-xs mb-1.5">Depression</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="depression" name="depression" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="headInjury" class="block font-semibold text-slate-700 text-xs mb-1.5">Head
-                                    Injury History</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="headInjury" name="headInjury" required>
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="behavioralProblems" class="block font-semibold text-slate-700 text-xs mb-1.5">Behavioral Problems</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="behavioralProblems" name="behavioralProblems" required>
-                                    <option value="0">No (Tidak ada masalah perilaku)</option>
-                                    <option value="1">Yes (Ada masalah perilaku)</option>
-                                </select>
-                                <div class="text-[10px] text-slate-400 mt-1">Agitation, aggression, or mood changes.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Group 4: Lifestyle & Habits -->
-                <div
-                    class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex flex-col justify-between">
-                    <div class="bg-slate-50/50 border-b border-slate-100 p-4 px-5">
-                        <h3 class="font-bold text-slate-800 flex items-center gap-2 text-sm uppercase tracking-wider">
-                            <i class="bi bi-lungs-fill text-secondary-blue text-base"></i> Lifestyle Habits & Sleep
-                        </h3>
-                    </div>
-                    <div class="p-5 grow flex flex-col justify-start gap-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="smoking" class="block font-semibold text-slate-700 text-xs mb-1.5">Smoking
-                                    Status</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="smoking" name="smoking" required>
-                                    <option value="0">No (Non-smoker)</option>
-                                    <option value="1">Yes (Active Smoker)</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="alcohol" class="block font-semibold text-slate-700 text-xs mb-1.5">Alcohol
-                                    Consumption</label>
-                                <select
-                                    class="w-full rounded-lg border border-slate-200 px-3.5 py-2 text-xs bg-slate-50/30 hover:bg-slate-50/50 focus:bg-white text-slate-800 focus:outline-none focus:border-secondary-blue focus:ring-2 focus:ring-blue-100 transition duration-150"
-                                    id="alcohol" name="alcohol" required>
-                                    <option value="0">No / Occasional</option>
-                                    <option value="1">Yes / Regular</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="w-full">
-                            <div
-                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-600">Physical Activity
-                                        (Hours/Week)</span>
-                                    <span id="valPhysical"
-                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">4.5</span>
-                                </div>
-                                <input type="range"
-                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
-                                    id="physicalActivity" name="physicalActivity" min="0" max="10" step="0.5"
-                                    value="4.5" data-value-display="valPhysical">
-                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
-                                    <span>0 Hours</span>
-                                    <span>10+ Hours</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                            <div
-                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-600">Sleep Quality</span>
-                                    <span id="valSleep"
-                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">7</span>
-                                </div>
-                                <input type="range"
-                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
-                                    id="sleepQuality" name="sleepQuality" min="1" max="10" step="1" value="7"
-                                    data-value-display="valSleep">
-                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
-                                    <span>1 (Poor)</span>
-                                    <span>10 (Excellent)</span>
-                                </div>
-                            </div>
-
-                            <div
-                                class="range-container bg-slate-50/30 hover:bg-slate-50/50 border border-slate-200/60 rounded-xl p-3.5 transition duration-150">
-                                <div class="flex items-center justify-between mb-1.5">
-                                    <span class="text-[11px] font-bold text-slate-600">Diet Quality</span>
-                                    <span id="valDiet"
-                                        class="text-[10px] font-bold text-secondary-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100/50">6</span>
-                                </div>
-                                <input type="range"
-                                    class="w-full accent-secondary-blue h-1 bg-slate-200 rounded-lg cursor-pointer transition"
-                                    id="dietQuality" name="dietQuality" min="1" max="10" step="1" value="6"
-                                    data-value-display="valDiet">
-                                <div class="flex justify-between text-[9px] text-slate-400 mt-1.5 font-medium">
-                                    <span>1 (Unhealthy)</span>
-                                    <span>10 (Healthy)</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Submit Button Container -->
-                <div class="lg:col-span-2 text-center mt-5">
-                    <button type="submit"
-                        class="btn-primary-gradient py-3 px-8 rounded-xl text-base shadow-md flex items-center gap-2 mx-auto">
-                        <i class="bi bi-shield-check text-lg"></i>Analyze Profile
+            <aside class="predict-sidebar">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">Navigasi Form</p>
+                <div class="space-y-2">
+                    <button type="button" class="predict-step-btn is-active" data-step-trigger="1" aria-current="step">
+                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-secondary-blue flex items-center justify-center text-sm font-bold shrink-0">1</span>
+                        <span>
+                            <span class="block text-sm font-bold">Demografi</span>
+                            <span class="block text-[11px] text-slate-500">Usia, gender, riwayat keluarga</span>
+                        </span>
                     </button>
-                    <p class="text-slate-400 mt-2.5 text-[11px]"><i class="bi bi-lock-fill mr-1"></i>Your input data is
-                        processed locally on the server and is not permanently stored.</p>
+                    <button type="button" class="predict-step-btn" data-step-trigger="2">
+                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">2</span>
+                        <span>
+                            <span class="block text-sm font-bold">Kognitif</span>
+                            <span class="block text-[11px] text-slate-500">MMSE, ADL, fungsi kognitif</span>
+                        </span>
+                    </button>
+                    <button type="button" class="predict-step-btn" data-step-trigger="3">
+                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">3</span>
+                        <span>
+                            <span class="block text-sm font-bold">Medis</span>
+                            <span class="block text-[11px] text-slate-500">BMI, tekanan darah, penyakit</span>
+                        </span>
+                    </button>
+                    <button type="button" class="predict-step-btn" data-step-trigger="4">
+                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">4</span>
+                        <span>
+                            <span class="block text-sm font-bold">Gaya Hidup</span>
+                            <span class="block text-[11px] text-slate-500">Aktivitas, tidur, diet</span>
+                        </span>
+                    </button>
+                </div>
+            </aside>
+
+            <div class="min-w-0 space-y-6">
+
+                <!-- Step 1 -->
+                <div class="predict-panel is-active" data-step-panel="1">
+                    <div class="predict-card">
+                        <div class="predict-card-header">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="bi bi-person-badge-fill text-secondary-blue"></i>
+                                    Demografi & Genetik
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">Informasi dasar pasien dan faktor genetik.</p>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">3 field</span>
+                        </div>
+                        <div class="predict-card-body predict-grid-3">
+                            <div>
+                                <label for="age" class="form-label">Usia (Tahun)</label>
+                                <input type="number" class="form-field" id="age" name="age" min="50" max="90" value="65" required>
+                                <p class="form-hint">Rentang valid: 50 - 90 tahun.</p>
+                            </div>
+                            <div>
+                                <label for="gender" class="form-label">Gender</label>
+                                <select class="form-field" id="gender" name="gender" required>
+                                    <option value="0">Perempuan</option>
+                                    <option value="1">Laki-laki</option>
+                                </select>
+                                <p class="form-hint">Jenis kelamin biologis.</p>
+                            </div>
+                            <div class="sm:col-span-2 lg:col-span-1">
+                                <label for="familyHistory" class="form-label">Riwayat Alzheimer Keluarga</label>
+                                <select class="form-field" id="familyHistory" name="familyHistory" required>
+                                    <option value="0">Tidak ada</option>
+                                    <option value="1">Ada riwayat keluarga dekat</option>
+                                </select>
+                                <p class="form-hint">Kerabat dekat pernah didiagnosis Alzheimer.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Step 2 -->
+                <div class="predict-panel" data-step-panel="2">
+                    <div class="predict-card">
+                        <div class="predict-card-header">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="bi bi-brain text-secondary-blue"></i>
+                                    Kognitif & Fungsional
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">Skor kognitif dan kemampuan fungsional harian.</p>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">4 field</span>
+                        </div>
+                        <div class="predict-card-body space-y-5">
+                            <div class="predict-grid-2">
+                                <div>
+                                    <label for="mmse" class="form-label">Skor MMSE</label>
+                                    <input type="number" class="form-field" id="mmse" name="mmse" min="0" max="30" value="27" required>
+                                    <p class="form-hint">Mini-Mental State Exam (0 - 30).</p>
+                                </div>
+                                <div>
+                                    <label for="memoryComplaints" class="form-label">Keluhan Memori</label>
+                                    <select class="form-field" id="memoryComplaints" name="memoryComplaints" required>
+                                        <option value="0">Tidak ada</option>
+                                        <option value="1">Ada keluhan memori</option>
+                                    </select>
+                                    <p class="form-hint">Keluhan subjektif penurunan memori.</p>
+                                </div>
+                            </div>
+                            <div class="predict-grid-2">
+                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="form-label mb-0">Skor ADL</span>
+                                        <span id="valAdl" class="range-value-display text-xs">8.5</span>
+                                    </div>
+                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="adl" name="adl" min="0" max="10" step="0.1" value="8.5" data-value-display="valAdl">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 Dependen</span><span>10 Mandiri</span></div>
+                                </div>
+                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="form-label mb-0">Functional Assessment</span>
+                                        <span id="valFunc" class="range-value-display text-xs">7.8</span>
+                                    </div>
+                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="functionalAssessment" name="functionalAssessment" min="0" max="10" step="0.1" value="7.8" data-value-display="valFunc">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 Parah</span><span>10 Normal</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="predict-panel" data-step-panel="3">
+                    <div class="predict-card">
+                        <div class="predict-card-header">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="bi bi-heart-pulse-fill text-secondary-blue"></i>
+                                    Riwayat Medis & Komposisi Tubuh
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">Parameter klinis dan kondisi medis pasien.</p>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">10 field</span>
+                        </div>
+                        <div class="predict-card-body predict-grid-3">
+                            <div>
+                                <label for="bmi" class="form-label">BMI</label>
+                                <input type="number" class="form-field" id="bmi" name="bmi" min="15" max="40" step="0.1" value="23.5" required>
+                                <p class="form-hint">Rentang: 15.0 - 40.0</p>
+                            </div>
+                            <div>
+                                <label for="cholesterolTotal" class="form-label">Kolesterol Total (mg/dL)</label>
+                                <input type="number" class="form-field" id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>
+                                <p class="form-hint">Normal: 150-200 mg/dL</p>
+                            </div>
+                            <div>
+                                <label for="systolicBP" class="form-label">Tekanan Sistolik</label>
+                                <input type="number" class="form-field" id="systolicBP" name="systolicBP" min="90" max="180" value="120" required>
+                                <p class="form-hint">Normal: 90-120 mmHg</p>
+                            </div>
+                            <div>
+                                <label for="diastolicBP" class="form-label">Tekanan Diastolik</label>
+                                <input type="number" class="form-field" id="diastolicBP" name="diastolicBP" min="60" max="120" value="80" required>
+                                <p class="form-hint">Normal: 60-80 mmHg</p>
+                            </div>
+                            <div>
+                                <label for="diabetes" class="form-label">Diabetes</label>
+                                <select class="form-field" id="diabetes" name="diabetes" required>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="hypertension" class="form-label">Hipertensi</label>
+                                <select class="form-field" id="hypertension" name="hypertension" required>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="cardiovascular" class="form-label">Penyakit Kardiovaskular</label>
+                                <select class="form-field" id="cardiovascular" name="cardiovascular" required>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="depression" class="form-label">Depresi</label>
+                                <select class="form-field" id="depression" name="depression" required>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="headInjury" class="form-label">Riwayat Cedera Kepala</label>
+                                <select class="form-field" id="headInjury" name="headInjury" required>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="behavioralProblems" class="form-label">Masalah Perilaku</label>
+                                <select class="form-field" id="behavioralProblems" name="behavioralProblems" required>
+                                    <option value="0">Tidak ada</option>
+                                    <option value="1">Ada masalah perilaku</option>
+                                </select>
+                                <p class="form-hint">Agitasi, agresi, atau perubahan mood.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="predict-panel" data-step-panel="4">
+                    <div class="predict-card">
+                        <div class="predict-card-header">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                                    <i class="bi bi-lungs-fill text-secondary-blue"></i>
+                                    Gaya Hidup & Tidur
+                                </h2>
+                                <p class="text-xs text-slate-500 mt-1">Kebiasaan sehari-hari yang memengaruhi risiko.</p>
+                            </div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">5 field</span>
+                        </div>
+                        <div class="predict-card-body space-y-5">
+                            <div class="predict-grid-2">
+                                <div>
+                                    <label for="smoking" class="form-label">Status Merokok</label>
+                                    <select class="form-field" id="smoking" name="smoking" required>
+                                        <option value="0">Tidak merokok</option>
+                                        <option value="1">Aktif merokok</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="alcohol" class="form-label">Konsumsi Alkohol</label>
+                                    <select class="form-field" id="alcohol" name="alcohol" required>
+                                        <option value="0">Tidak / sesekali</option>
+                                        <option value="1">Ya / rutin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="form-label mb-0">Aktivitas Fisik (jam/minggu)</span>
+                                    <span id="valPhysical" class="range-value-display text-xs">4.5</span>
+                                </div>
+                                <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="physicalActivity" name="physicalActivity" min="0" max="10" step="0.5" value="4.5" data-value-display="valPhysical">
+                                <div class="flex justify-between form-hint mt-2 mb-0"><span>0 jam</span><span>10+ jam</span></div>
+                            </div>
+                            <div class="predict-grid-2">
+                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="form-label mb-0">Kualitas Tidur</span>
+                                        <span id="valSleep" class="range-value-display text-xs">7</span>
+                                    </div>
+                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="sleepQuality" name="sleepQuality" min="1" max="10" step="1" value="7" data-value-display="valSleep">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 Buruk</span><span>10 Sangat baik</span></div>
+                                </div>
+                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="form-label mb-0">Kualitas Diet</span>
+                                        <span id="valDiet" class="range-value-display text-xs">6</span>
+                                    </div>
+                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="dietQuality" name="dietQuality" min="1" max="10" step="1" value="6" data-value-display="valDiet">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 Tidak sehat</span><span>10 Sehat</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="predict-action-bar">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
+                            <i class="bi bi-shield-check text-secondary-blue"></i>
+                            Data diproses lokal dan disimpan sebagai riwayat prediksi.
+                        </p>
+                        <div class="flex items-center gap-3 justify-end">
+                            <button type="button" id="predictPrevBtn"
+                                class="px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:border-secondary-blue hover:text-secondary-blue transition opacity-40 pointer-events-none">
+                                <i class="bi bi-arrow-left mr-1"></i> Sebelumnya
+                            </button>
+                            <button type="button" id="predictNextBtn"
+                                class="btn-primary-gradient px-6 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2">
+                                Selanjutnya <i class="bi bi-arrow-right"></i>
+                            </button>
+                            <button type="submit" id="predictSubmitBtn"
+                                class="btn-primary-gradient px-6 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2 hidden">
+                                <i class="bi bi-cpu-fill"></i> Analisis Profil
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-12">
-        <div class="page-container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left mb-10">
-                <div>
-                    <a class="font-extrabold text-xl text-white flex items-center gap-2 mb-3" href="/">
-                        <i class="bi bi-activity text-sky-400"></i> NeuroCare AI
-                    </a>
-                    <p class="text-slate-400 text-sm max-w-xs leading-relaxed">
-                        Early detection systems utilizing modern artificial intelligence to advance healthcare outcomes.
-                    </p>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold text-sm mb-3">Links</h5>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="/" class="hover:text-white transition-all">Home</a></li>
-                        <li><a href="/predict" class="hover:text-white transition-all">Screening Form</a></li>
-                        <li><a href="/#about" class="hover:text-white transition-all">About Dataset</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 class="text-white font-bold text-sm mb-3">Universitas Andalas</h5>
-                    <p class="text-slate-400 text-sm mb-0.5">Fakultas Teknologi Informasi</p>
-                    <p class="text-slate-400 text-sm">Kelompok APM &copy; 2026</p>
-                </div>
-            </div>
-            <hr class="border-slate-800 mb-6">
-            <div class="text-center text-slate-500 text-xs">
-                &copy; 2026 NeuroCare AI. All Rights Reserved. Created by Kelompok APM - Universitas Andalas.
-            </div>
+    <footer class="bg-slate-950 text-slate-400 py-10">
+        <div class="page-container-wide text-center text-xs">
+            &copy; 2026 NeuroCare AI &mdash; Kelompok APM, Universitas Andalas
         </div>
     </footer>
 
-    <!-- Main JS file -->
     <script src="/js/main.js"></script>
 </body>
 
