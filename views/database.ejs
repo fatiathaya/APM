@@ -4,179 +4,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NeuroCare AI - Riwayat prediksi Alzheimer.">
+    <meta name="description"
+        content="NeuroCare AI - Riwayat Prediksi Alzheimer. Lihat semua hasil skrining yang telah dilakukan.">
     <title>Riwayat Prediksi - NeuroCare AI</title>
     <link href="/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body class="bg-body-bg text-primary-dark font-outfit antialiased">
-    <% const summaryData = (typeof summary !== 'undefined' && summary) ? summary : { total_predictions: 0, high_risk_count: 0, low_risk_count: 0 }; %>
-    <% const recordList = (typeof records !== 'undefined' && records) ? records : []; %>
-    <% const currentPage = (typeof page !== 'undefined') ? page : 1; %>
-    <% const pagesTotal = (typeof totalPages !== 'undefined') ? totalPages : 1; %>
-    <% const recordTotal = (typeof total !== 'undefined') ? total : 0; %>
+    <% const summaryData=(typeof summary !=='undefined' && summary) ? summary : { total_predictions: 0, high_risk_count:
+        0, low_risk_count: 0 }; %>
+        <% const recordList=(typeof records !=='undefined' && records) ? records : []; %>
+            <% const currentPage=(typeof page !=='undefined' ) ? page : 1; %>
+                <% const pagesTotal=(typeof totalPages !=='undefined' ) ? totalPages : 1; %>
+                    <% const recordTotal=(typeof total !=='undefined' ) ? total : 0; %>
 
-    <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
-        <div class="page-container-wide flex items-center justify-between">
-            <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
-                <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
-            </a>
-            <div class="hidden md:flex items-center gap-6">
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/">Home</a>
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="/predict">Prediction</a>
-                <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
-                    href="/database">Riwayat</a>
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="/#about">About</a>
-                <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
-            </div>
-            <div class="md:hidden">
-                <a class="btn-primary-gradient px-4 py-2 rounded-lg text-xs" href="/predict">Start Screening</a>
-            </div>
-        </div>
-    </nav>
+                        <!-- Navbar -->
+                        <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
+                            <div class="page-container-wide flex items-center justify-between">
+                                <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
+                                    <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
+                                </a>
+                                <div class="hidden md:flex items-center gap-6">
+                                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                                        href="/">Home</a>
+                                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                                        href="/predict">Prediksi</a>
+                                    <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5"
+                                        href="/database">Riwayat</a>
+                                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                                        href="/#about">Tentang</a>
+                                    <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm"
+                                        href="/predict">Prediksi Baru</a>
+                                </div>
+                                <button class="hamburger-btn md:hidden" id="hamburgerBtn" aria-label="Menu navigasi">
+                                    <span></span><span></span><span></span>
+                                </button>
+                            </div>
+                        </nav>
 
-    <div class="pt-28 pb-6 hero-bg">
-        <div class="page-container-wide">
-            <span
-                class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider">
-                <i class="bi bi-clock-history"></i> Histori Prediksi
-            </span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Riwayat Prediksi</h2>
-            <p class="text-slate-500 text-sm max-w-2xl leading-relaxed">
-                Daftar hasil prediksi Alzheimer dari form screening web. Setiap kali Anda submit form,
-                hasilnya otomatis tersimpan di sini.
-            </p>
-        </div>
-    </div>
+                        <!-- Mobile Menu -->
+                        <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+                        <div class="mobile-menu" id="mobileMenu">
+                            <div class="pt-20 px-6 pb-8 flex flex-col gap-2">
+                                <a href="/"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                                    <i class="bi bi-house text-lg text-slate-400"></i> Home
+                                </a>
+                                <a href="/predict"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                                    <i class="bi bi-clipboard2-pulse text-lg text-slate-400"></i> Prediksi
+                                </a>
+                                <a href="/database"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-secondary-blue font-semibold">
+                                    <i class="bi bi-clock-history text-lg"></i> Riwayat
+                                </a>
+                                <a href="/#about"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                                    <i class="bi bi-info-circle text-lg text-slate-400"></i> Tentang
+                                </a>
+                                <hr class="my-3 border-slate-100">
+                                <a class="btn-primary-gradient px-5 py-3 rounded-xl text-sm text-center"
+                                    href="/predict">
+                                    <i class="bi bi-plus-circle mr-1"></i> Prediksi Baru
+                                </a>
+                            </div>
+                        </div>
 
-    <section class="page-container-wide pb-16 space-y-6">
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
-            <div class="glass-card p-5 lg:p-6 rounded-xl text-center">
-                <div class="text-2xl font-extrabold text-secondary-blue"><%= summaryData.total_predictions || 0 %></div>
-                <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-1">Total Prediksi</div>
-            </div>
-            <div class="glass-card p-5 lg:p-6 rounded-xl text-center">
-                <div class="text-2xl font-extrabold text-rose-600"><%= summaryData.high_risk_count || 0 %></div>
-                <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-1">High Risk</div>
-            </div>
-            <div class="glass-card p-5 lg:p-6 rounded-xl text-center">
-                <div class="text-2xl font-extrabold text-emerald-600"><%= summaryData.low_risk_count || 0 %></div>
-                <div class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-1">Low Risk</div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-slate-100 bg-slate-50/50">
-                <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                    <i class="bi bi-table text-secondary-blue"></i> Data Riwayat Prediksi
-                </h3>
-            </div>
-
-            <div class="p-4 border-b border-slate-50">
-                <p class="text-xs text-slate-500">
-                    Menampilkan <span class="font-semibold text-slate-700"><%= recordList.length %></span>
-                    dari <span class="font-semibold text-slate-700"><%= recordTotal %></span> prediksi
-                    (halaman <%= currentPage %> / <%= pagesTotal %>)
-                </p>
-            </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm min-w-[760px]">
-                    <thead class="bg-slate-50 text-slate-500 uppercase tracking-wide">
-                        <tr>
-                            <th class="px-4 py-3 font-bold">No</th>
-                            <th class="px-4 py-3 font-bold">Usia</th>
-                            <th class="px-4 py-3 font-bold">Gender</th>
-                            <th class="px-4 py-3 font-bold">MMSE</th>
-                            <th class="px-4 py-3 font-bold">ADL</th>
-                            <th class="px-4 py-3 font-bold">Hasil</th>
-                            <th class="px-4 py-3 font-bold">Probabilitas</th>
-                            <th class="px-4 py-3 font-bold">Status</th>
-                            <th class="px-4 py-3 font-bold">Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100">
-                        <% if (recordList.length === 0) { %>
-                            <tr>
-                                <td colspan="9" class="px-4 py-12 text-center text-slate-400">
-                                    <i class="bi bi-inbox text-3xl block mb-3"></i>
-                                    Belum ada riwayat prediksi.
-                                    <a href="/predict" class="block mt-2 text-secondary-blue font-semibold hover:underline">
-                                        Mulai screening sekarang
+                        <!-- Page Header -->
+                        <div class="pt-28 pb-8 hero-bg border-b border-slate-100/80">
+                            <div class="page-container-wide">
+                                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center gap-1.5 bg-white/80 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider border border-blue-100">
+                                            <i class="bi bi-clock-history"></i> Histori Prediksi
+                                        </span>
+                                        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-2">Riwayat
+                                            Prediksi</h1>
+                                        <p class="text-slate-500 text-sm max-w-2xl leading-relaxed">
+                                            Daftar hasil prediksi Alzheimer dari form skrining. Setiap kali form
+                                            disubmit, hasilnya otomatis tersimpan di sini.
+                                        </p>
+                                    </div>
+                                    <a href="/predict"
+                                        class="btn-primary-gradient px-5 py-2.5 rounded-xl text-sm inline-flex items-center gap-2 shrink-0">
+                                        <i class="bi bi-plus-circle"></i> Prediksi Baru
                                     </a>
-                                </td>
-                            </tr>
-                        <% } else { %>
-                            <% recordList.forEach(function(row) { %>
-                                <tr class="hover:bg-slate-50/70 transition">
-                                    <td class="px-4 py-3 font-semibold text-slate-800">#<%= row.id %></td>
-                                    <td class="px-4 py-3"><%= row.age != null ? row.age + ' thn' : '-' %></td>
-                                    <td class="px-4 py-3">
-                                        <%= row.gender === 1 ? 'Laki-laki' : row.gender === 0 ? 'Perempuan' : '-' %>
-                                    </td>
-                                    <td class="px-4 py-3"><%= row.mmse != null ? Number(row.mmse).toFixed(1) : '-' %></td>
-                                    <td class="px-4 py-3"><%= row.adl != null ? Number(row.adl).toFixed(1) : '-' %></td>
-                                    <td class="px-4 py-3">
-                                        <% if (row.is_high_risk) { %>
-                                            <span class="inline-flex px-2 py-0.5 rounded-full bg-rose-50 text-rose-600 font-bold text-[10px]">High Risk</span>
-                                        <% } else { %>
-                                            <span class="inline-flex px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">Low Risk</span>
-                                        <% } %>
-                                    </td>
-                                    <td class="px-4 py-3 font-bold text-slate-800"><%= Number(row.probability_percentage).toFixed(1) %>%</td>
-                                    <td class="px-4 py-3 text-slate-600"><%= row.status_text %></td>
-                                    <td class="px-4 py-3 text-slate-500 whitespace-nowrap">
-                                        <%= new Date(row.created_at).toLocaleString('id-ID') %>
-                                    </td>
-                                </tr>
-                            <% }); %>
-                        <% } %>
-                    </tbody>
-                </table>
-            </div>
+                                </div>
+                            </div>
+                        </div>
 
-            <% if (pagesTotal > 1) { %>
-                <div class="flex items-center justify-center gap-2 p-4 border-t border-slate-100 bg-slate-50/30">
-                    <% if (currentPage > 1) { %>
-                        <a href="/database?page=<%= currentPage - 1 %>"
-                            class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:border-secondary-blue hover:text-secondary-blue transition">
-                            <i class="bi bi-chevron-left"></i> Sebelumnya
-                        </a>
-                    <% } %>
+                        <section class="page-container-wide py-8 pb-16 space-y-6">
 
-                    <% for (let i = Math.max(1, currentPage - 2); i <= Math.min(pagesTotal, currentPage + 2); i++) { %>
-                        <a href="/database?page=<%= i %>"
-                            class="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition <%= i === currentPage ? 'bg-secondary-blue text-white' : 'border border-slate-200 text-slate-600 hover:border-secondary-blue' %>">
-                            <%= i %>
-                        </a>
-                    <% } %>
+                            <!-- Summary Cards -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 lg:gap-6">
+                                <!-- Total -->
+                                <div
+                                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 lg:p-6 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl shrink-0">
+                                        <i class="bi bi-clipboard2-data-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-slate-900">
+                                            <%= summaryData.total_predictions || 0 %>
+                                        </div>
+                                        <div
+                                            class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-0.5">
+                                            Total Prediksi</div>
+                                    </div>
+                                </div>
+                                <!-- High Risk -->
+                                <div
+                                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 lg:p-6 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
+                                        <i class="bi bi-exclamation-triangle-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-rose-600">
+                                            <%= summaryData.high_risk_count || 0 %>
+                                        </div>
+                                        <div
+                                            class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-0.5">
+                                            Risiko Tinggi</div>
+                                        <% if (summaryData.total_predictions> 0) { %>
+                                            <div class="text-[10px] text-rose-400 font-medium mt-0.5">
+                                                <%= Math.round((summaryData.high_risk_count /
+                                                    summaryData.total_predictions) * 100) %>% dari total
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                </div>
+                                <!-- Low Risk -->
+                                <div
+                                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 lg:p-6 flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                                        <i class="bi bi-shield-check-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-extrabold text-emerald-600">
+                                            <%= summaryData.low_risk_count || 0 %>
+                                        </div>
+                                        <div
+                                            class="text-[11px] text-slate-500 font-semibold uppercase tracking-wide mt-0.5">
+                                            Risiko Rendah</div>
+                                        <% if (summaryData.total_predictions> 0) { %>
+                                            <div class="text-[10px] text-emerald-500 font-medium mt-0.5">
+                                                <%= Math.round((summaryData.low_risk_count /
+                                                    summaryData.total_predictions) * 100) %>% dari total
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                </div>
+                            </div>
 
-                    <% if (currentPage < pagesTotal) { %>
-                        <a href="/database?page=<%= currentPage + 1 %>"
-                            class="px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:border-secondary-blue hover:text-secondary-blue transition">
-                            Selanjutnya <i class="bi bi-chevron-right"></i>
-                        </a>
-                    <% } %>
-                </div>
-            <% } %>
-        </div>
+                            <!-- Risk Distribution Bar -->
+                            <% if (summaryData.total_predictions> 0) { %>
+                                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+                                    <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Distribusi
+                                        Risiko</p>
+                                    <div class="flex h-3 rounded-full overflow-hidden gap-0.5">
+                                        <div class="bg-emerald-400 transition-all duration-1000 rounded-l-full"
+                                            style="width: <%= summaryData.total_predictions > 0 ? Math.round((summaryData.low_risk_count / summaryData.total_predictions) * 100) : 0 %>%">
+                                        </div>
+                                        <div class="bg-rose-400 transition-all duration-1000 rounded-r-full"
+                                            style="width: <%= summaryData.total_predictions > 0 ? Math.round((summaryData.high_risk_count / summaryData.total_predictions) * 100) : 0 %>%">
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-4 mt-2.5">
+                                        <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0"></span>
+                                            Risiko Rendah
+                                        </span>
+                                        <span class="flex items-center gap-1.5 text-[11px] text-slate-500">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-rose-400 shrink-0"></span> Risiko
+                                            Tinggi
+                                        </span>
+                                    </div>
+                                </div>
+                                <% } %>
 
-        <div class="flex flex-wrap gap-3">
-            <a href="/predict" class="btn-primary-gradient py-2.5 px-5 rounded-xl text-sm inline-flex items-center gap-2">
-                <i class="bi bi-plus-circle"></i> Prediksi Baru
-            </a>
-        </div>
-    </section>
+                                    <!-- Data Table -->
+                                    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                                        <div
+                                            class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-4 bg-slate-50/50">
+                                            <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                                                <i class="bi bi-table text-secondary-blue"></i> Data Riwayat Prediksi
+                                            </h3>
+                                            <p class="text-xs text-slate-500">
+                                                Menampilkan <span class="font-semibold text-slate-700">
+                                                    <%= recordList.length %>
+                                                </span>
+                                                dari <span class="font-semibold text-slate-700">
+                                                    <%= recordTotal %>
+                                                </span> prediksi
+                                                (hal. <%= currentPage %> / <%= pagesTotal %>)
+                                            </p>
+                                        </div>
 
-    <footer class="bg-slate-950 text-slate-400 py-8">
-        <div class="page-container-wide text-center text-xs">
-            &copy; 2026 NeuroCare AI &mdash; Riwayat Prediksi
-        </div>
-    </footer>
+                                        <div class="overflow-x-auto">
+                                            <table class="data-table min-w-[820px]">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-[10px]">No</th>
+                                                        <th class="text-[10px]">Usia</th>
+                                                        <th class="text-[10px]">Gender</th>
+                                                        <th class="text-[10px]">MMSE</th>
+                                                        <th class="text-[10px]">ADL</th>
+                                                        <th class="text-[10px]">Hasil</th>
+                                                        <th class="text-[10px]">Probabilitas</th>
+                                                        <th class="text-[10px]">Status</th>
+                                                        <th class="text-[10px]">Tanggal</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if (recordList.length===0) { %>
+                                                        <tr>
+                                                            <td colspan="9" class="px-4 py-16 text-center">
+                                                                <div
+                                                                    class="flex flex-col items-center gap-3 text-slate-400">
+                                                                    <div
+                                                                        class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-3xl">
+                                                                        <i class="bi bi-inbox"></i>
+                                                                    </div>
+                                                                    <div>
+                                                                        <p class="font-semibold text-slate-600 mb-1">
+                                                                            Belum ada riwayat prediksi</p>
+                                                                        <p class="text-sm text-slate-400">Data prediksi
+                                                                            akan muncul di sini setelah Anda melakukan
+                                                                            skrining pertama.</p>
+                                                                    </div>
+                                                                    <a href="/predict"
+                                                                        class="btn-primary-gradient px-5 py-2.5 rounded-xl text-sm inline-flex items-center gap-2 mt-2">
+                                                                        <i class="bi bi-plus-circle"></i> Mulai Skrining
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <% } else { %>
+                                                            <% recordList.forEach(function(row, index) { %>
+                                                                <tr>
+                                                                    <td class="font-semibold text-slate-500 text-xs">#
+                                                                        <%= row.id %>
+                                                                    </td>
+                                                                    <td class="font-medium text-slate-800">
+                                                                        <%= row.age !=null ? row.age + ' thn' : '-' %>
+                                                                    </td>
+                                                                    <td class="text-slate-600">
+                                                                        <span class="inline-flex items-center gap-1">
+                                                                            <i
+                                                                                class="bi <%= row.gender === 1 ? 'bi-gender-male text-blue-500' : 'bi-gender-female text-pink-500' %> text-xs"></i>
+                                                                            <%= row.gender===1 ? 'L' : row.gender===0
+                                                                                ? 'P' : '-' %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span
+                                                                            class="font-semibold <%= Number(row.mmse) >= 27 ? 'text-emerald-600' : Number(row.mmse) >= 24 ? 'text-amber-600' : 'text-rose-600' %>">
+                                                                            <%= row.mmse !=null ?
+                                                                                Number(row.mmse).toFixed(0) : '-' %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span
+                                                                            class="font-semibold <%= Number(row.adl) >= 7.5 ? 'text-emerald-600' : Number(row.adl) >= 5 ? 'text-amber-600' : 'text-rose-600' %>">
+                                                                            <%= row.adl !=null ?
+                                                                                Number(row.adl).toFixed(1) : '-' %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <% if (row.is_high_risk) { %>
+                                                                            <span
+                                                                                class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-rose-50 text-rose-600 font-bold text-[10px] border border-rose-100">
+                                                                                <i
+                                                                                    class="bi bi-exclamation-triangle-fill text-[9px]"></i>
+                                                                                Tinggi
+                                                                            </span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px] border border-emerald-100">
+                                                                                    <i
+                                                                                        class="bi bi-shield-check-fill text-[9px]"></i>
+                                                                                    Rendah
+                                                                                </span>
+                                                                                <% } %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="flex items-center gap-2">
+                                                                            <div
+                                                                                class="w-16 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                                                                                <div class="h-full rounded-full <%= Number(row.probability_percentage) >= 50 ? 'bg-rose-400' : 'bg-emerald-400' %>"
+                                                                                    style="width: <%= Number(row.probability_percentage).toFixed(0) %>%">
+                                                                                </div>
+                                                                            </div>
+                                                                            <span
+                                                                                class="font-bold text-slate-800 text-xs">
+                                                                                <%= Number(row.probability_percentage).toFixed(1)
+                                                                                    %>%
+                                                                            </span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="text-slate-600 text-xs max-w-[120px] truncate"
+                                                                        title="<%= row.status_text %>">
+                                                                        <%= row.status_text %>
+                                                                    </td>
+                                                                    <td
+                                                                        class="text-slate-400 text-xs whitespace-nowrap">
+                                                                        <%= new
+                                                                            Date(row.created_at).toLocaleString('id-ID',
+                                                                            { day:'2-digit', month:'short',
+                                                                            year:'numeric', hour:'2-digit',
+                                                                            minute:'2-digit' }) %>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }); %>
+                                                                    <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- Pagination -->
+                                        <% if (pagesTotal> 1) { %>
+                                            <div
+                                                class="flex items-center justify-between gap-2 px-5 py-4 border-t border-slate-100 bg-slate-50/30">
+                                                <p class="text-xs text-slate-500 hidden sm:block">
+                                                    Halaman <%= currentPage %> dari <%= pagesTotal %>
+                                                </p>
+                                                <div class="flex items-center gap-1.5 mx-auto sm:mx-0">
+                                                    <% if (currentPage> 1) { %>
+                                                        <a href="/database?page=<%= currentPage - 1 %>"
+                                                            class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:border-secondary-blue hover:text-secondary-blue transition">
+                                                            <i class="bi bi-chevron-left text-[10px]"></i> Sebelumnya
+                                                        </a>
+                                                        <% } %>
+
+                                                            <% for (let i=Math.max(1, currentPage - 2); i
+                                                                <=Math.min(pagesTotal, currentPage + 2); i++) { %>
+                                                                <a href="/database?page=<%= i %>"
+                                                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition
+                                <%= i === currentPage ? 'bg-secondary-blue text-white shadow-sm' : 'border border-slate-200 text-slate-600 hover:border-secondary-blue hover:text-secondary-blue' %>">
+                                                                    <%= i %>
+                                                                </a>
+                                                                <% } %>
+
+                                                                    <% if (currentPage < pagesTotal) { %>
+                                                                        <a href="/database?page=<%= currentPage + 1 %>"
+                                                                            class="flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:border-secondary-blue hover:text-secondary-blue transition">
+                                                                            Selanjutnya <i
+                                                                                class="bi bi-chevron-right text-[10px]"></i>
+                                                                        </a>
+                                                                        <% } %>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    </div>
+
+                                    <!-- Legend -->
+                                    <div class="bg-white/60 rounded-xl border border-slate-100 p-4">
+                                        <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+                                            Keterangan Tabel</p>
+                                        <div class="flex flex-wrap gap-4 text-[11px] text-slate-500">
+                                            <span class="flex items-center gap-1.5"><strong
+                                                    class="text-emerald-600">Hijau</strong> = Nilai dalam rentang
+                                                normal/baik</span>
+                                            <span class="flex items-center gap-1.5"><strong
+                                                    class="text-amber-600">Kuning</strong> = Nilai perlu perhatian
+                                                (borderline)</span>
+                                            <span class="flex items-center gap-1.5"><strong
+                                                    class="text-rose-600">Merah</strong> = Nilai di luar
+                                                normal/berisiko</span>
+                                            <span class="flex items-center gap-1.5"><strong>MMSE</strong> normal ≥ 27 |
+                                                <strong>ADL</strong> mandiri ≥ 7.5</span>
+                                        </div>
+                                    </div>
+                        </section>
+
+                        <!-- Footer -->
+                        <footer class="bg-slate-950 text-slate-400 py-8">
+                            <div class="page-container-wide">
+                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                                    <div class="text-xs">&copy; 2026 NeuroCare AI &mdash; Kelompok APM, Universitas
+                                        Andalas</div>
+                                    <a href="/predict"
+                                        class="btn-primary-gradient px-5 py-2 rounded-lg text-xs inline-flex items-center gap-2">
+                                        <i class="bi bi-plus-circle"></i> Prediksi Baru
+                                    </a>
+                                </div>
+                            </div>
+                        </footer>
+
+                        <script src="/js/main.js"></script>
 </body>
 
 </html>

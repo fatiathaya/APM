@@ -200,7 +200,7 @@ app.post('/result', async (req, res) => {
 
     } catch (error) {
         console.error('Prediction error:', error.message);
-        
+
         // Jika Python API tidak tersedia, tampilkan error page
         res.status(500).render('error', {
             error: 'Prediction service unavailable',

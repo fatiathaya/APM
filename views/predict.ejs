@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="NeuroCare AI - Alzheimer Prediction Input Form. Run XGBoost predictive screening model.">
+        content="NeuroCare AI - Form Screening Alzheimer. Jalankan model prediksi XGBoost untuk deteksi dini risiko Alzheimer.">
     <title>Screening Form - NeuroCare AI</title>
     <link href="/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -13,6 +13,7 @@
 
 <body class="bg-body-bg text-primary-dark font-outfit antialiased overflow-x-hidden">
 
+    <!-- Navbar -->
     <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
         <div class="page-container-wide flex items-center justify-between">
             <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
@@ -21,40 +22,98 @@
             <div class="hidden md:flex items-center gap-6">
                 <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/">Home</a>
                 <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
-                    href="/predict">Prediction</a>
+                    href="/predict">Prediksi</a>
                 <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
                     href="/database">Riwayat</a>
                 <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="/#about">About</a>
+                    href="/#about">Tentang</a>
             </div>
-            <div class="md:hidden">
-                <a class="text-secondary-blue text-sm font-semibold" href="/database">Riwayat</a>
-            </div>
+            <!-- Mobile hamburger -->
+            <button class="hamburger-btn md:hidden" id="hamburgerBtn" aria-label="Menu navigasi">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="pt-20 px-6 pb-8 flex flex-col gap-2">
+            <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-house text-lg text-slate-400"></i> Home
+            </a>
+            <a href="/predict" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-secondary-blue font-semibold">
+                <i class="bi bi-clipboard2-pulse text-lg"></i> Prediksi
+            </a>
+            <a href="/database" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-clock-history text-lg text-slate-400"></i> Riwayat
+            </a>
+            <a href="/#about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-info-circle text-lg text-slate-400"></i> Tentang
+            </a>
+            <hr class="my-3 border-slate-100">
+            <a class="btn-primary-gradient px-5 py-3 rounded-xl text-sm text-center" href="/predict">
+                <i class="bi bi-shield-plus mr-1"></i> Mulai Screening
+            </a>
+        </div>
+    </div>
+
+    <!-- Page Header -->
     <header class="pt-24 pb-8 hero-bg border-b border-slate-100/80">
         <div class="page-container-wide">
             <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
                 <div class="max-w-3xl">
                     <span
                         class="inline-flex items-center gap-1.5 bg-white/80 text-blue-600 text-[10px] font-bold px-3.5 py-1.5 rounded-full mb-3 uppercase tracking-wider border border-blue-100">
-                        <i class="bi bi-clipboard2-pulse"></i> Predictive Analysis
+                        <i class="bi bi-clipboard2-pulse"></i> Analisis Prediktif
                     </span>
                     <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                        Alzheimer's Early Screening
+                        Skrining Dini Alzheimer
                     </h1>
                     <p class="text-slate-500 text-sm md:text-base leading-relaxed">
-                        Isi 4 langkah penilaian klinis di bawah. Form dirancang responsif agar mudah digunakan di desktop maupun mobile.
+                        Lengkapi 4 langkah penilaian klinis berikut. Form ini dirancang agar mudah digunakan oleh tenaga kesehatan di berbagai perangkat.
                     </p>
+
+                    <!-- Quick info badges -->
+                    <div class="flex flex-wrap items-center gap-2 mt-4">
+                        <span class="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-100">
+                            <i class="bi bi-clock"></i> ~3 menit
+                        </span>
+                        <span class="inline-flex items-center gap-1 bg-slate-50 text-slate-600 text-[10px] font-bold px-2.5 py-1 rounded-full border border-slate-100">
+                            <i class="bi bi-shield-lock"></i> Data diproses lokal
+                        </span>
+                        <span class="inline-flex items-center gap-1 bg-blue-50 text-blue-600 text-[10px] font-bold px-2.5 py-1 rounded-full border border-blue-100">
+                            <i class="bi bi-cpu"></i> 22 parameter
+                        </span>
+                    </div>
                 </div>
+
+                <!-- Progress Card -->
                 <div class="w-full lg:w-80 bg-white/80 backdrop-blur rounded-2xl border border-slate-100 p-4 shadow-sm">
                     <div class="flex items-center justify-between text-xs font-semibold text-slate-500 mb-2">
                         <span id="predictProgressText">Langkah 1 dari 4</span>
                         <span id="predictCurrentStepLabel">Demografi & Genetik</span>
                     </div>
-                    <div class="h-2 rounded-full bg-slate-200 overflow-hidden">
-                        <div id="predictProgressBar" class="h-full bg-gradient-to-r from-primary-blue to-secondary-blue rounded-full transition-all duration-300" style="width: 25%"></div>
+                    <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                        <div id="predictProgressBar" class="h-full bg-gradient-to-r from-secondary-blue to-accent-blue rounded-full transition-all duration-500 ease-out" style="width: 25%"></div>
+                    </div>
+                    <!-- Mobile stepper dots -->
+                    <div class="mobile-stepper mt-3">
+                        <button type="button" class="mobile-stepper-step is-active" data-mobile-step="1">
+                            <span class="mobile-step-dot">1</span>
+                        </button>
+                        <div class="mobile-stepper-line is-active"></div>
+                        <button type="button" class="mobile-stepper-step" data-mobile-step="2">
+                            <span class="mobile-step-dot">2</span>
+                        </button>
+                        <div class="mobile-stepper-line"></div>
+                        <button type="button" class="mobile-stepper-step" data-mobile-step="3">
+                            <span class="mobile-step-dot">3</span>
+                        </button>
+                        <div class="mobile-stepper-line"></div>
+                        <button type="button" class="mobile-stepper-step" data-mobile-step="4">
+                            <span class="mobile-step-dot">4</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -64,43 +123,54 @@
     <section class="page-container-wide py-8 pb-20">
         <form id="alzheimerPredictionForm" action="/result" method="POST" class="predict-shell">
 
-            <aside class="predict-sidebar">
+            <!-- Sidebar Navigation (Desktop) -->
+            <aside class="predict-sidebar hidden xl:block">
                 <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-3 px-1">Navigasi Form</p>
                 <div class="space-y-2">
                     <button type="button" class="predict-step-btn is-active" data-step-trigger="1" aria-current="step">
-                        <span class="w-8 h-8 rounded-lg bg-blue-100 text-secondary-blue flex items-center justify-center text-sm font-bold shrink-0">1</span>
+                        <span class="step-badge bg-secondary-blue text-white">1</span>
                         <span>
-                            <span class="block text-sm font-bold">Demografi</span>
+                            <span class="block text-sm font-bold text-slate-800">Demografi</span>
                             <span class="block text-[11px] text-slate-500">Usia, gender, riwayat keluarga</span>
                         </span>
                     </button>
                     <button type="button" class="predict-step-btn" data-step-trigger="2">
-                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">2</span>
+                        <span class="step-badge bg-slate-100 text-slate-500">2</span>
                         <span>
-                            <span class="block text-sm font-bold">Kognitif</span>
+                            <span class="block text-sm font-bold text-slate-800">Kognitif</span>
                             <span class="block text-[11px] text-slate-500">MMSE, ADL, fungsi kognitif</span>
                         </span>
                     </button>
                     <button type="button" class="predict-step-btn" data-step-trigger="3">
-                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">3</span>
+                        <span class="step-badge bg-slate-100 text-slate-500">3</span>
                         <span>
-                            <span class="block text-sm font-bold">Medis</span>
+                            <span class="block text-sm font-bold text-slate-800">Medis</span>
                             <span class="block text-[11px] text-slate-500">BMI, tekanan darah, penyakit</span>
                         </span>
                     </button>
                     <button type="button" class="predict-step-btn" data-step-trigger="4">
-                        <span class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center text-sm font-bold shrink-0">4</span>
+                        <span class="step-badge bg-slate-100 text-slate-500">4</span>
                         <span>
-                            <span class="block text-sm font-bold">Gaya Hidup</span>
+                            <span class="block text-sm font-bold text-slate-800">Gaya Hidup</span>
                             <span class="block text-[11px] text-slate-500">Aktivitas, tidur, diet</span>
                         </span>
                     </button>
+                </div>
+
+                <!-- Sidebar disclaimer -->
+                <div class="mt-5 p-3 bg-amber-50/80 rounded-xl border border-amber-100">
+                    <p class="text-[10px] text-amber-700 leading-relaxed flex items-start gap-1.5">
+                        <i class="bi bi-exclamation-triangle-fill text-amber-500 mt-0.5 shrink-0"></i>
+                        Alat ini bukan pengganti diagnosis medis profesional. Konsultasikan hasil dengan dokter.
+                    </p>
                 </div>
             </aside>
 
             <div class="min-w-0 space-y-6">
 
-                <!-- Step 1 -->
+                <!-- ============================================
+                     STEP 1: Demografi & Genetik
+                     ============================================ -->
                 <div class="predict-panel is-active" data-step-panel="1">
                     <div class="predict-card">
                         <div class="predict-card-header">
@@ -111,35 +181,63 @@
                                 </h2>
                                 <p class="text-xs text-slate-500 mt-1">Informasi dasar pasien dan faktor genetik.</p>
                             </div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">3 field</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Langkah 1</span>
                         </div>
-                        <div class="predict-card-body predict-grid-3">
-                            <div>
-                                <label for="age" class="form-label">Usia (Tahun)</label>
-                                <input type="number" class="form-field" id="age" name="age" min="50" max="90" value="65" required>
-                                <p class="form-hint">Rentang valid: 50 - 90 tahun.</p>
-                            </div>
-                            <div>
-                                <label for="gender" class="form-label">Gender</label>
-                                <select class="form-field" id="gender" name="gender" required>
-                                    <option value="0">Perempuan</option>
-                                    <option value="1">Laki-laki</option>
-                                </select>
-                                <p class="form-hint">Jenis kelamin biologis.</p>
-                            </div>
-                            <div class="sm:col-span-2 lg:col-span-1">
-                                <label for="familyHistory" class="form-label">Riwayat Alzheimer Keluarga</label>
-                                <select class="form-field" id="familyHistory" name="familyHistory" required>
-                                    <option value="0">Tidak ada</option>
-                                    <option value="1">Ada riwayat keluarga dekat</option>
-                                </select>
-                                <p class="form-hint">Kerabat dekat pernah didiagnosis Alzheimer.</p>
+                        <div class="predict-card-body">
+                            <div class="predict-grid-3">
+                                <!-- Usia -->
+                                <div>
+                                    <label for="age" class="form-label-with-tooltip">
+                                        Usia (Tahun)
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Usia pasien saat ini dalam tahun. Risiko Alzheimer meningkat seiring bertambahnya usia, terutama setelah 65 tahun.</span>
+                                        </span>
+                                    </label>
+                                    <input type="number" class="form-field" id="age" name="age" min="50" max="90" value="65" required>
+                                    <p class="form-hint">Rentang valid: 50 – 90 tahun</p>
+                                </div>
+                                <!-- Gender -->
+                                <div>
+                                    <label for="gender" class="form-label-with-tooltip">
+                                        Jenis Kelamin
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Jenis kelamin biologis pasien. Beberapa studi menunjukkan prevalensi Alzheimer lebih tinggi pada wanita.</span>
+                                        </span>
+                                    </label>
+                                    <select class="form-field" id="gender" name="gender" required>
+                                        <option value="0">Perempuan</option>
+                                        <option value="1">Laki-laki</option>
+                                    </select>
+                                </div>
+                                <!-- Riwayat Keluarga -->
+                                <div class="sm:col-span-2 lg:col-span-1">
+                                    <label class="form-label-with-tooltip">
+                                        Riwayat Alzheimer Keluarga
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Apakah kerabat dekat (orang tua, saudara kandung) pernah didiagnosis Alzheimer? Faktor genetik meningkatkan risiko 2-3 kali lipat.</span>
+                                        </span>
+                                    </label>
+                                    <div class="toggle-group" data-toggle-for="familyHistory">
+                                        <label class="toggle-option is-active">
+                                            <input type="radio" name="familyHistory" value="0" checked> Tidak Ada
+                                        </label>
+                                        <label class="toggle-option">
+                                            <input type="radio" name="familyHistory" value="1"> Ada Riwayat
+                                        </label>
+                                    </div>
+                                    <p class="form-hint">Kerabat dekat pernah didiagnosis Alzheimer.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2 -->
+                <!-- ============================================
+                     STEP 2: Kognitif & Fungsional
+                     ============================================ -->
                 <div class="predict-panel" data-step-panel="2">
                     <div class="predict-card">
                         <div class="predict-card-header">
@@ -148,49 +246,83 @@
                                     <i class="bi bi-brain text-secondary-blue"></i>
                                     Kognitif & Fungsional
                                 </h2>
-                                <p class="text-xs text-slate-500 mt-1">Skor kognitif dan kemampuan fungsional harian.</p>
+                                <p class="text-xs text-slate-500 mt-1">Skor kognitif dan kemampuan fungsional harian pasien.</p>
                             </div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">4 field</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Langkah 2</span>
                         </div>
                         <div class="predict-card-body space-y-5">
                             <div class="predict-grid-2">
+                                <!-- MMSE -->
                                 <div>
-                                    <label for="mmse" class="form-label">Skor MMSE</label>
+                                    <label for="mmse" class="form-label-with-tooltip">
+                                        Skor MMSE
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Mini-Mental State Examination — tes standar fungsi kognitif. Skor 27-30 = normal, 24-26 = gangguan ringan, <24 = gangguan signifikan.</span>
+                                        </span>
+                                    </label>
                                     <input type="number" class="form-field" id="mmse" name="mmse" min="0" max="30" value="27" required>
-                                    <p class="form-hint">Mini-Mental State Exam (0 - 30).</p>
+                                    <p class="form-hint">Mini-Mental State Exam (0 – 30). Normal ≥ 27.</p>
                                 </div>
+                                <!-- Keluhan Memori -->
                                 <div>
-                                    <label for="memoryComplaints" class="form-label">Keluhan Memori</label>
-                                    <select class="form-field" id="memoryComplaints" name="memoryComplaints" required>
-                                        <option value="0">Tidak ada</option>
-                                        <option value="1">Ada keluhan memori</option>
-                                    </select>
+                                    <label class="form-label-with-tooltip">
+                                        Keluhan Memori
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Apakah pasien atau keluarga melaporkan keluhan penurunan daya ingat secara subjektif?</span>
+                                        </span>
+                                    </label>
+                                    <div class="toggle-group" data-toggle-for="memoryComplaints">
+                                        <label class="toggle-option is-active">
+                                            <input type="radio" name="memoryComplaints" value="0" checked> Tidak Ada
+                                        </label>
+                                        <label class="toggle-option">
+                                            <input type="radio" name="memoryComplaints" value="1"> Ada Keluhan
+                                        </label>
+                                    </div>
                                     <p class="form-hint">Keluhan subjektif penurunan memori.</p>
                                 </div>
                             </div>
                             <div class="predict-grid-2">
-                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                <!-- ADL -->
+                                <div class="range-container">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="form-label mb-0">Skor ADL</span>
-                                        <span id="valAdl" class="range-value-display text-xs">8.5</span>
+                                        <span class="form-label-with-tooltip mb-0">
+                                            Skor ADL
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Activities of Daily Living — mengukur kemandirian aktivitas sehari-hari (makan, berpakaian, mandi, dll). 0 = dependen total, 10 = mandiri penuh.</span>
+                                            </span>
+                                        </span>
+                                        <span id="valAdl" class="range-value-display">8.5</span>
                                     </div>
-                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="adl" name="adl" min="0" max="10" step="0.1" value="8.5" data-value-display="valAdl">
-                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 Dependen</span><span>10 Mandiri</span></div>
+                                    <input type="range" class="w-full range-positive" id="adl" name="adl" min="0" max="10" step="0.1" value="8.5" data-value-display="valAdl">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 = Dependen</span><span>10 = Mandiri</span></div>
                                 </div>
-                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                <!-- Functional Assessment -->
+                                <div class="range-container">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="form-label mb-0">Functional Assessment</span>
-                                        <span id="valFunc" class="range-value-display text-xs">7.8</span>
+                                        <span class="form-label-with-tooltip mb-0">
+                                            Penilaian Fungsional
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Functional Assessment — evaluasi kemampuan pasien menjalankan tugas kompleks sehari-hari (mengelola keuangan, memasak, dll).</span>
+                                            </span>
+                                        </span>
+                                        <span id="valFunc" class="range-value-display">7.8</span>
                                     </div>
-                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="functionalAssessment" name="functionalAssessment" min="0" max="10" step="0.1" value="7.8" data-value-display="valFunc">
-                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 Parah</span><span>10 Normal</span></div>
+                                    <input type="range" class="w-full range-positive" id="functionalAssessment" name="functionalAssessment" min="0" max="10" step="0.1" value="7.8" data-value-display="valFunc">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>0 = Parah</span><span>10 = Normal</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 3 -->
+                <!-- ============================================
+                     STEP 3: Riwayat Medis & Komposisi Tubuh
+                     ============================================ -->
                 <div class="predict-panel" data-step-panel="3">
                     <div class="predict-card">
                         <div class="predict-card-header">
@@ -201,77 +333,176 @@
                                 </h2>
                                 <p class="text-xs text-slate-500 mt-1">Parameter klinis dan kondisi medis pasien.</p>
                             </div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">10 field</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Langkah 3</span>
                         </div>
-                        <div class="predict-card-body predict-grid-3">
+                        <div class="predict-card-body space-y-6">
+                            <!-- Sub-section: Pengukuran Tubuh -->
                             <div>
-                                <label for="bmi" class="form-label">BMI</label>
-                                <input type="number" class="form-field" id="bmi" name="bmi" min="15" max="40" step="0.1" value="23.5" required>
-                                <p class="form-hint">Rentang: 15.0 - 40.0</p>
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                                    <i class="bi bi-rulers text-slate-400"></i> Pengukuran Tubuh
+                                </h3>
+                                <div class="predict-grid-3">
+                                    <div>
+                                        <label for="bmi" class="form-label-with-tooltip">
+                                            BMI
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Body Mass Index — rasio berat/tinggi badan. Normal: 18.5–24.9. BMI abnormal terkait peningkatan risiko demensia.</span>
+                                            </span>
+                                        </label>
+                                        <input type="number" class="form-field" id="bmi" name="bmi" min="15" max="40" step="0.1" value="23.5" required>
+                                        <p class="form-hint">Normal: 18.5 – 24.9</p>
+                                    </div>
+                                    <div>
+                                        <label for="cholesterolTotal" class="form-label-with-tooltip">
+                                            Kolesterol Total (mg/dL)
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Kadar kolesterol total dalam darah. Normal: <200 mg/dL. Kolesterol tinggi dikaitkan dengan risiko kardiovaskular dan demensia.</span>
+                                            </span>
+                                        </label>
+                                        <input type="number" class="form-field" id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>
+                                        <p class="form-hint">Normal: &lt;200 mg/dL</p>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Sub-section: Tekanan Darah -->
                             <div>
-                                <label for="cholesterolTotal" class="form-label">Kolesterol Total (mg/dL)</label>
-                                <input type="number" class="form-field" id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>
-                                <p class="form-hint">Normal: 150-200 mg/dL</p>
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                                    <i class="bi bi-heart-pulse text-slate-400"></i> Tekanan Darah
+                                </h3>
+                                <div class="predict-grid-2">
+                                    <div>
+                                        <label for="systolicBP" class="form-label-with-tooltip">
+                                            Sistolik (mmHg)
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Tekanan darah sistolik — tekanan saat jantung berkontraksi. Normal: 90-120 mmHg. Hipertensi meningkatkan risiko gangguan kognitif.</span>
+                                            </span>
+                                        </label>
+                                        <input type="number" class="form-field" id="systolicBP" name="systolicBP" min="90" max="180" value="120" required>
+                                        <p class="form-hint">Normal: 90 – 120 mmHg</p>
+                                    </div>
+                                    <div>
+                                        <label for="diastolicBP" class="form-label-with-tooltip">
+                                            Diastolik (mmHg)
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Tekanan darah diastolik — tekanan saat jantung berelaksasi. Normal: 60-80 mmHg.</span>
+                                            </span>
+                                        </label>
+                                        <input type="number" class="form-field" id="diastolicBP" name="diastolicBP" min="60" max="120" value="80" required>
+                                        <p class="form-hint">Normal: 60 – 80 mmHg</p>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Sub-section: Riwayat Penyakit -->
                             <div>
-                                <label for="systolicBP" class="form-label">Tekanan Sistolik</label>
-                                <input type="number" class="form-field" id="systolicBP" name="systolicBP" min="90" max="180" value="120" required>
-                                <p class="form-hint">Normal: 90-120 mmHg</p>
-                            </div>
-                            <div>
-                                <label for="diastolicBP" class="form-label">Tekanan Diastolik</label>
-                                <input type="number" class="form-field" id="diastolicBP" name="diastolicBP" min="60" max="120" value="80" required>
-                                <p class="form-hint">Normal: 60-80 mmHg</p>
-                            </div>
-                            <div>
-                                <label for="diabetes" class="form-label">Diabetes</label>
-                                <select class="form-field" id="diabetes" name="diabetes" required>
-                                    <option value="0">Tidak</option>
-                                    <option value="1">Ya</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="hypertension" class="form-label">Hipertensi</label>
-                                <select class="form-field" id="hypertension" name="hypertension" required>
-                                    <option value="0">Tidak</option>
-                                    <option value="1">Ya</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="cardiovascular" class="form-label">Penyakit Kardiovaskular</label>
-                                <select class="form-field" id="cardiovascular" name="cardiovascular" required>
-                                    <option value="0">Tidak</option>
-                                    <option value="1">Ya</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="depression" class="form-label">Depresi</label>
-                                <select class="form-field" id="depression" name="depression" required>
-                                    <option value="0">Tidak</option>
-                                    <option value="1">Ya</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="headInjury" class="form-label">Riwayat Cedera Kepala</label>
-                                <select class="form-field" id="headInjury" name="headInjury" required>
-                                    <option value="0">Tidak</option>
-                                    <option value="1">Ya</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="behavioralProblems" class="form-label">Masalah Perilaku</label>
-                                <select class="form-field" id="behavioralProblems" name="behavioralProblems" required>
-                                    <option value="0">Tidak ada</option>
-                                    <option value="1">Ada masalah perilaku</option>
-                                </select>
-                                <p class="form-hint">Agitasi, agresi, atau perubahan mood.</p>
+                                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                                    <i class="bi bi-clipboard2-pulse text-slate-400"></i> Riwayat Penyakit & Kondisi
+                                </h3>
+                                <div class="predict-grid-3">
+                                    <div>
+                                        <label class="form-label">Diabetes</label>
+                                        <div class="toggle-group" data-toggle-for="diabetes">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="diabetes" value="0" checked> Tidak
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="diabetes" value="1"> Ya
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Hipertensi</label>
+                                        <div class="toggle-group" data-toggle-for="hypertension">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="hypertension" value="0" checked> Tidak
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="hypertension" value="1"> Ya
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label-with-tooltip">
+                                            Kardiovaskular
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Riwayat penyakit jantung koroner, gagal jantung, aritmia, atau penyakit pembuluh darah lainnya.</span>
+                                            </span>
+                                        </label>
+                                        <div class="toggle-group" data-toggle-for="cardiovascular">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="cardiovascular" value="0" checked> Tidak
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="cardiovascular" value="1"> Ya
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label-with-tooltip">
+                                            Depresi
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Riwayat gangguan depresi mayor atau depresi kronis. Depresi dikaitkan dengan peningkatan risiko demensia.</span>
+                                            </span>
+                                        </label>
+                                        <div class="toggle-group" data-toggle-for="depression">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="depression" value="0" checked> Tidak
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="depression" value="1"> Ya
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label-with-tooltip">
+                                            Cedera Kepala
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Riwayat cedera traumatis otak (TBI), benturan keras di kepala, atau gegar otak yang pernah dialami.</span>
+                                            </span>
+                                        </label>
+                                        <div class="toggle-group" data-toggle-for="headInjury">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="headInjury" value="0" checked> Tidak
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="headInjury" value="1"> Ya
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="form-label-with-tooltip">
+                                            Masalah Perilaku
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Adanya agitasi, agresi, perubahan mood, wandering, atau perilaku berulang yang tidak biasa.</span>
+                                            </span>
+                                        </label>
+                                        <div class="toggle-group" data-toggle-for="behavioralProblems">
+                                            <label class="toggle-option is-active">
+                                                <input type="radio" name="behavioralProblems" value="0" checked> Tidak Ada
+                                            </label>
+                                            <label class="toggle-option">
+                                                <input type="radio" name="behavioralProblems" value="1"> Ada
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 4 -->
+                <!-- ============================================
+                     STEP 4: Gaya Hidup & Tidur
+                     ============================================ -->
                 <div class="predict-panel" data-step-panel="4">
                     <div class="predict-card">
                         <div class="predict-card-header">
@@ -282,60 +513,94 @@
                                 </h2>
                                 <p class="text-xs text-slate-500 mt-1">Kebiasaan sehari-hari yang memengaruhi risiko.</p>
                             </div>
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">5 field</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Langkah 4</span>
                         </div>
                         <div class="predict-card-body space-y-5">
                             <div class="predict-grid-2">
                                 <div>
-                                    <label for="smoking" class="form-label">Status Merokok</label>
-                                    <select class="form-field" id="smoking" name="smoking" required>
-                                        <option value="0">Tidak merokok</option>
-                                        <option value="1">Aktif merokok</option>
-                                    </select>
+                                    <label class="form-label">Status Merokok</label>
+                                    <div class="toggle-group" data-toggle-for="smoking">
+                                        <label class="toggle-option is-active">
+                                            <input type="radio" name="smoking" value="0" checked> Tidak Merokok
+                                        </label>
+                                        <label class="toggle-option">
+                                            <input type="radio" name="smoking" value="1"> Aktif Merokok
+                                        </label>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label for="alcohol" class="form-label">Konsumsi Alkohol</label>
-                                    <select class="form-field" id="alcohol" name="alcohol" required>
-                                        <option value="0">Tidak / sesekali</option>
-                                        <option value="1">Ya / rutin</option>
-                                    </select>
+                                    <label class="form-label-with-tooltip">
+                                        Konsumsi Alkohol
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Apakah pasien mengonsumsi alkohol secara rutin? Konsumsi berlebihan meningkatkan risiko gangguan kognitif.</span>
+                                        </span>
+                                    </label>
+                                    <div class="toggle-group" data-toggle-for="alcohol">
+                                        <label class="toggle-option is-active">
+                                            <input type="radio" name="alcohol" value="0" checked> Tidak / Sesekali
+                                        </label>
+                                        <label class="toggle-option">
+                                            <input type="radio" name="alcohol" value="1"> Ya / Rutin
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                            <!-- Physical Activity -->
+                            <div class="range-container">
                                 <div class="flex items-center justify-between mb-2">
-                                    <span class="form-label mb-0">Aktivitas Fisik (jam/minggu)</span>
-                                    <span id="valPhysical" class="range-value-display text-xs">4.5</span>
+                                    <span class="form-label-with-tooltip mb-0">
+                                        Aktivitas Fisik (jam/minggu)
+                                        <span class="tooltip-wrapper">
+                                            <span class="tooltip-trigger">?</span>
+                                            <span class="tooltip-content">Total jam aktivitas fisik per minggu (jalan kaki, olahraga, berkebun, dll). WHO merekomendasikan ≥2.5 jam/minggu untuk lansia.</span>
+                                        </span>
+                                    </span>
+                                    <span id="valPhysical" class="range-value-display">4.5</span>
                                 </div>
-                                <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="physicalActivity" name="physicalActivity" min="0" max="10" step="0.5" value="4.5" data-value-display="valPhysical">
+                                <input type="range" class="w-full range-positive" id="physicalActivity" name="physicalActivity" min="0" max="10" step="0.5" value="4.5" data-value-display="valPhysical">
                                 <div class="flex justify-between form-hint mt-2 mb-0"><span>0 jam</span><span>10+ jam</span></div>
                             </div>
                             <div class="predict-grid-2">
-                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                <div class="range-container">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="form-label mb-0">Kualitas Tidur</span>
-                                        <span id="valSleep" class="range-value-display text-xs">7</span>
+                                        <span class="form-label-with-tooltip mb-0">
+                                            Kualitas Tidur
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Penilaian subjektif kualitas tidur pasien. Tidur yang buruk memengaruhi clearance beta-amiloid di otak.</span>
+                                            </span>
+                                        </span>
+                                        <span id="valSleep" class="range-value-display">7</span>
                                     </div>
-                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="sleepQuality" name="sleepQuality" min="1" max="10" step="1" value="7" data-value-display="valSleep">
-                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 Buruk</span><span>10 Sangat baik</span></div>
+                                    <input type="range" class="w-full range-positive" id="sleepQuality" name="sleepQuality" min="1" max="10" step="1" value="7" data-value-display="valSleep">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 = Buruk</span><span>10 = Sangat baik</span></div>
                                 </div>
-                                <div class="range-container rounded-xl p-4 border border-slate-200 bg-slate-50/50">
+                                <div class="range-container">
                                     <div class="flex items-center justify-between mb-2">
-                                        <span class="form-label mb-0">Kualitas Diet</span>
-                                        <span id="valDiet" class="range-value-display text-xs">6</span>
+                                        <span class="form-label-with-tooltip mb-0">
+                                            Kualitas Diet
+                                            <span class="tooltip-wrapper">
+                                                <span class="tooltip-trigger">?</span>
+                                                <span class="tooltip-content">Penilaian kualitas pola makan. Pertimbangkan asupan sayuran, buah, ikan, dan makanan olahan.</span>
+                                            </span>
+                                        </span>
+                                        <span id="valDiet" class="range-value-display">6</span>
                                     </div>
-                                    <input type="range" class="w-full accent-secondary-blue h-1.5 cursor-pointer" id="dietQuality" name="dietQuality" min="1" max="10" step="1" value="6" data-value-display="valDiet">
-                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 Tidak sehat</span><span>10 Sehat</span></div>
+                                    <input type="range" class="w-full range-positive" id="dietQuality" name="dietQuality" min="1" max="10" step="1" value="6" data-value-display="valDiet">
+                                    <div class="flex justify-between form-hint mt-2 mb-0"><span>1 = Tidak sehat</span><span>10 = Sehat</span></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Action Bar -->
                 <div class="predict-action-bar">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <p class="text-[11px] text-slate-500 flex items-center gap-1.5">
                             <i class="bi bi-shield-check text-secondary-blue"></i>
-                            Data diproses lokal dan disimpan sebagai riwayat prediksi.
+                            Data diproses secara lokal dan disimpan sebagai riwayat prediksi.
                         </p>
                         <div class="flex items-center gap-3 justify-end">
                             <button type="button" id="predictPrevBtn"
@@ -347,7 +612,7 @@
                                 Selanjutnya <i class="bi bi-arrow-right"></i>
                             </button>
                             <button type="submit" id="predictSubmitBtn"
-                                class="btn-primary-gradient px-6 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2 hidden">
+                                class="btn-primary-gradient animate-pulse-soft px-6 py-2.5 rounded-xl text-sm font-semibold inline-flex items-center gap-2 hidden">
                                 <i class="bi bi-cpu-fill"></i> Analisis Profil
                             </button>
                         </div>
