@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load model saat aplikasi dimulai
-MODEL_PATH = 'model_alzheimer_final (1).pkl'
+MODEL_PATH = 'model_alzheimer_final (2).pkl'
 model_data = None
 
 try:

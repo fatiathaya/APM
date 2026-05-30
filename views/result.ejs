@@ -20,15 +20,17 @@
 
         <!-- Navbar -->
         <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
-            <div class="max-w-6xl mx-auto px-5 flex items-center justify-between">
+            <div class="page-container-wide flex items-center justify-between">
                 <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
                     <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
                 </a>
                 <div class="hidden md:flex items-center gap-6">
                     <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
                         href="/">Home</a>
-                    <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
+                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
                         href="/predict">Prediction</a>
+                    <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
+                        href="/database">Riwayat</a>
                     <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
                         href="/#about">About</a>
                     <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
@@ -40,9 +42,9 @@
         </nav>
 
         <!-- Main Content Container -->
-        <div class="pt-28 pb-16 bg-gradient-to-b from-light-blue-bg to-body-bg/0 min-h-screen">
-            <div class="max-w-6xl mx-auto px-5">
-                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 md:p-8">
+        <div class="pt-28 pb-16 hero-bg min-h-screen">
+            <div class="page-container-wide">
+                <div class="bg-white rounded-3xl border border-slate-100 shadow-md p-6 md:p-8 lg:p-10">
 
                     <!-- Header with back arrow -->
                     <div class="flex items-center gap-2.5 mb-6">
@@ -303,7 +305,7 @@
 
         <!-- Footer -->
         <footer class="bg-slate-950 text-slate-400 py-12">
-            <div class="max-w-6xl mx-auto px-5">
+            <div class="page-container-wide">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-left mb-10">
                     <div>
                         <a class="font-extrabold text-xl text-white flex items-center gap-2 mb-3" href="/">

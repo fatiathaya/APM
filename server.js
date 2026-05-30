@@ -1,6 +1,15 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const axios = require('axios');
+const { testConnection } = require('./config/db');
+const {
+    savePredictionSession,
+    getDatasetStats,
+    getPredictionLogs,
+    getPredictionSummary
+} = require('./config/patientRepository');
 
 const app = express();
 
@@ -116,6 +125,39 @@ app.post('/result', async (req, res) => {
         const isHighRisk = predictionResult.is_high_risk;
         const statusText = predictionResult.status_text;
 
+        // Simpan input dan hasil prediksi ke MySQL
+        try {
+            await savePredictionSession(
+                {
+                    age,
+                    gender,
+                    bmi,
+                    smoking,
+                    alcoholConsumption,
+                    physicalActivity,
+                    dietQuality,
+                    sleepQuality,
+                    familyHistoryAlzheimers,
+                    cardiovascularDisease,
+                    diabetes,
+                    depression,
+                    headInjury,
+                    hypertension,
+                    systolicBP,
+                    diastolicBP,
+                    cholesterolTotal,
+                    mmse,
+                    functionalAssessment,
+                    memoryComplaints,
+                    behavioralProblems,
+                    adl
+                },
+                predictionResult
+            );
+        } catch (dbError) {
+            console.error('Database save error:', dbError.message);
+        }
+
         // SVG Gauge circumference setup (2 * pi * 95)
         const circumference = 596.9;
         const dashoffset = circumference * (1 - probability);
@@ -168,8 +210,56 @@ app.post('/result', async (req, res) => {
     }
 });
 
+// Halaman riwayat prediksi
+app.get('/database', async (req, res) => {
+    try {
+        const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+        const limit = 15;
+
+        const summary = await getPredictionSummary();
+        const { rows: records, total } = await getPredictionLogs({ page, limit });
+        const totalPages = Math.max(1, Math.ceil(total / limit));
+
+        res.render('database', {
+            page,
+            limit,
+            summary,
+            records,
+            total,
+            totalPages
+        });
+    } catch (error) {
+        res.status(500).render('error', {
+            error: 'Database tidak tersedia',
+            message: error.message,
+            details: 'Pastikan MySQL XAMPP sudah berjalan dan database neurocare_ai sudah di-setup.'
+        });
+    }
+});
+
+// Statistik dataset dari database
+app.get('/api/stats', async (req, res) => {
+    try {
+        const stats = await getDatasetStats();
+        res.json({ success: true, stats });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: 'Database unavailable',
+            message: error.message
+        });
+    }
+});
+
 // Start Express Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
+    try {
+        await testConnection();
+        console.log('MySQL connected: neurocare_ai');
+    } catch (error) {
+        console.warn('MySQL not connected:', error.message);
+        console.warn('Jalankan database\\setup_db.bat setelah Start MySQL di XAMPP.');
+    }
 });

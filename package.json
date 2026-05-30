@@ -5,6 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
+    "db:setup": "database\\setup_db.bat",
+    "db:seed": "node database/seed_hermina.js",
     "build:css": "tailwindcss -i ./public/src/input.css -o ./public/css/style.css",
     "watch:css": "tailwindcss -i ./public/src/input.css -o ./public/css/style.css --watch"
   },
@@ -14,8 +16,10 @@
   "description": "",
   "dependencies": {
     "axios": "^1.7.2",
+    "dotenv": "^16.6.1",
     "ejs": "^5.0.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mysql2": "^3.22.4"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.0",
