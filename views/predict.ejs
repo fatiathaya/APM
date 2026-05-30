@@ -16,8 +16,9 @@
     <!-- Navbar -->
     <nav class="glass-nav fixed top-0 left-0 w-full py-3.5 z-50">
         <div class="page-container-wide flex items-center justify-between">
-            <a class="font-extrabold text-xl text-primary-blue flex items-center gap-2" href="/">
-                <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
+            <a class="brand-link" href="/" aria-label="NeuroCare AI — Beranda">
+                <img src="/images/neurocare-icon.png" alt="" class="brand-logo-mark" width="32" height="32">
+                <span class="brand-logo-text">NeuroCare <span class="brand-logo-ai">AI</span></span>
             </a>
             <div class="hidden md:flex items-center gap-6">
                 <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/">Home</a>
@@ -258,7 +259,7 @@
                                         Skor MMSE
                                         <span class="tooltip-wrapper">
                                             <span class="tooltip-trigger">?</span>
-                                            <span class="tooltip-content">Mini-Mental State Examination — tes standar fungsi kognitif. Skor 27-30 = normal, 24-26 = gangguan ringan, <24 = gangguan signifikan.</span>
+                                            <span class="tooltip-content">Mini-Mental State Examination — tes fungsi kognitif. Skor 27–30 normal, 24–26 gangguan ringan, di bawah 24 gangguan signifikan.</span>
                                         </span>
                                     </label>
                                     <input type="number" class="form-field" id="mmse" name="mmse" min="0" max="30" value="27" required>
@@ -358,7 +359,7 @@
                                             Kolesterol Total (mg/dL)
                                             <span class="tooltip-wrapper">
                                                 <span class="tooltip-trigger">?</span>
-                                                <span class="tooltip-content">Kadar kolesterol total dalam darah. Normal: <200 mg/dL. Kolesterol tinggi dikaitkan dengan risiko kardiovaskular dan demensia.</span>
+                                                <span class="tooltip-content">Kadar kolesterol total dalam darah. Normal: di bawah 200 mg/dL. Nilai tinggi meningkatkan risiko kardiovaskular dan demensia.</span>
                                             </span>
                                         </label>
                                         <input type="number" class="form-field" id="cholesterolTotal" name="cholesterolTotal" min="150" max="300" step="0.1" value="200" required>

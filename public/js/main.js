@@ -89,27 +89,74 @@ function initToggleSwitches() {
 }
 
 /* ============================================================
-   TOOLTIPS
+   TOOLTIPS (dekat ikon ?, flip jika mepet tepi layar)
    ============================================================ */
 function initTooltips() {
-    document.querySelectorAll('.tooltip-trigger').forEach(trigger => {
+    const margin = 12;
+
+    const positionTooltip = (wrapper) => {
+        const content = wrapper.querySelector('.tooltip-content');
+        if (!content) return;
+
+        content.classList.remove('is-above', 'is-align-end');
+
+        let rect = content.getBoundingClientRect();
+
+        if (rect.bottom > window.innerHeight - margin) {
+            content.classList.add('is-above');
+            rect = content.getBoundingClientRect();
+        }
+
+        if (rect.right > window.innerWidth - margin) {
+            content.classList.add('is-align-end');
+        }
+    };
+
+    const showTooltip = (wrapper) => {
+        document.querySelectorAll('.tooltip-wrapper.is-active').forEach((active) => {
+            if (active !== wrapper) hideTooltip(active);
+        });
+        wrapper.classList.add('is-active');
+        requestAnimationFrame(() => positionTooltip(wrapper));
+    };
+
+    const hideTooltip = (wrapper) => {
+        wrapper.classList.remove('is-active');
+        const content = wrapper.querySelector('.tooltip-content');
+        if (content) {
+            content.classList.remove('is-above', 'is-align-end');
+        }
+    };
+
+    document.querySelectorAll('.tooltip-trigger').forEach((trigger) => {
         const wrapper = trigger.closest('.tooltip-wrapper');
         if (!wrapper) return;
 
-        trigger.addEventListener('mouseenter', () => wrapper.classList.add('is-active'));
-        trigger.addEventListener('mouseleave', () => wrapper.classList.remove('is-active'));
-        trigger.addEventListener('focus', () => wrapper.classList.add('is-active'));
-        trigger.addEventListener('blur', () => wrapper.classList.remove('is-active'));
+        trigger.setAttribute('tabindex', '0');
+        trigger.setAttribute('role', 'button');
+        trigger.setAttribute('aria-label', 'Informasi');
 
-        // Touch devices: toggle on tap
+        trigger.addEventListener('mouseenter', () => showTooltip(wrapper));
+        trigger.addEventListener('mouseleave', () => hideTooltip(wrapper));
+        trigger.addEventListener('focus', () => showTooltip(wrapper));
+        trigger.addEventListener('blur', () => hideTooltip(wrapper));
+
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
-            wrapper.classList.toggle('is-active');
+            if (wrapper.classList.contains('is-active')) {
+                hideTooltip(wrapper);
+            } else {
+                showTooltip(wrapper);
+            }
         });
     });
 
+    window.addEventListener('resize', () => {
+        document.querySelectorAll('.tooltip-wrapper.is-active').forEach(positionTooltip);
+    });
+
     document.addEventListener('click', () => {
-        document.querySelectorAll('.tooltip-wrapper.is-active').forEach(w => w.classList.remove('is-active'));
+        document.querySelectorAll('.tooltip-wrapper.is-active').forEach(hideTooltip);
     });
 }
 
