@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description"
-        content="NeuroCare AI - Early Detection of Alzheimer's Risk using XGBoost Machine Learning. Responsive screening tools for cognitive health.">
-    <title>NeuroCare AI - Early Alzheimer's Detection</title>
+        content="NeuroCare AI - Deteksi Dini Risiko Alzheimer menggunakan XGBoost Machine Learning. Alat skrining kognitif untuk tenaga kesehatan.">
+    <title>NeuroCare AI - Deteksi Dini Alzheimer</title>
     <link href="/css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
@@ -20,57 +20,80 @@
                 <i class="bi bi-activity text-secondary-blue text-2xl"></i> NeuroCare AI
             </a>
             <div class="hidden md:flex items-center gap-6">
-                <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5 transition-all"
-                    href="/">Home</a>
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="/predict">Prediction</a>
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="/database">Riwayat</a>
-                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all"
-                    href="#about">About</a>
-                <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Start Prediction</a>
+                <a class="text-sm font-semibold text-primary-dark border-b-2 border-secondary-blue pb-0.5" href="/">Home</a>
+                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/predict">Prediksi</a>
+                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="/database">Riwayat</a>
+                <a class="text-sm font-medium text-slate-500 hover:text-secondary-blue transition-all" href="#about">Tentang</a>
+                <a class="btn-primary-gradient px-5 py-2 rounded-lg text-sm" href="/predict">Mulai Skrining</a>
             </div>
-            <div class="md:hidden">
-                <a class="btn-primary-gradient px-4 py-2 rounded-lg text-xs" href="/predict">Start Screening</a>
-            </div>
+            <button class="hamburger-btn md:hidden" id="hamburgerBtn" aria-label="Menu navigasi">
+                <span></span><span></span><span></span>
+            </button>
         </div>
     </nav>
 
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="pt-20 px-6 pb-8 flex flex-col gap-2">
+            <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-blue-50 text-secondary-blue font-semibold">
+                <i class="bi bi-house text-lg"></i> Home
+            </a>
+            <a href="/predict" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-clipboard2-pulse text-lg text-slate-400"></i> Prediksi
+            </a>
+            <a href="/database" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-clock-history text-lg text-slate-400"></i> Riwayat
+            </a>
+            <a href="#about" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-600 hover:bg-slate-50 transition font-medium">
+                <i class="bi bi-info-circle text-lg text-slate-400"></i> Tentang
+            </a>
+            <hr class="my-3 border-slate-100">
+            <a class="btn-primary-gradient px-5 py-3 rounded-xl text-sm text-center" href="/predict">
+                <i class="bi bi-shield-plus mr-1"></i> Mulai Skrining
+            </a>
+        </div>
+    </div>
+
     <!-- Hero Section -->
-    <section class="relative pt-28 pb-20 lg:pb-24 overflow-hidden hero-bg">
+    <section class="relative pt-28 pb-20 lg:pb-28 overflow-hidden hero-bg">
         <div class="absolute -left-32 top-24 w-80 h-80 bg-blue-300/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -right-24 bottom-10 w-96 h-96 bg-sky-400/15 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="page-container-wide relative z-10">
             <div class="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 xl:gap-16">
                 <div class="lg:col-span-6 xl:col-span-5 text-left animate-fade-in">
-                    <span
-                        class="inline-flex items-center gap-1.5 bg-white/80 text-blue-600 text-[11px] font-bold px-3.5 py-1.5 rounded-full mb-5 uppercase tracking-wider shadow-sm border border-blue-100">
-                        <i class="bi bi-cpu-fill"></i> Powered by XGBoost ML
-                    </span>
-                    <h1
-                        class="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-5">
-                        Early Detection of Alzheimer Risk Using Artificial Intelligence
+                    <!-- Trust Badge -->
+                    <div class="flex flex-wrap gap-2 mb-5">
+                        <span class="inline-flex items-center gap-1.5 bg-white/80 text-blue-600 text-[11px] font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm border border-blue-100">
+                            <i class="bi bi-cpu-fill"></i> Powered by XGBoost ML
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-[11px] font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-emerald-100">
+                            <i class="bi bi-shield-check-fill"></i> Untuk Tenaga Kesehatan
+                        </span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-[3.25rem] font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-5">
+                        Deteksi Dini Risiko Alzheimer dengan
+                        <span class="text-secondary-blue">Kecerdasan Buatan</span>
                     </h1>
                     <p class="text-slate-500 text-base lg:text-lg leading-relaxed mb-8 max-w-2xl">
-                        Analyze clinical, behavioral, and cognitive parameters to estimate early-stage Alzheimer's risk
-                        using advanced machine learning models.
+                        Analisis parameter klinis, perilaku, dan kognitif pasien untuk memperkirakan risiko Alzheimer tahap awal menggunakan model machine learning XGBoost yang tervalidasi.
                     </p>
                     <div class="flex flex-wrap gap-3">
                         <a href="/predict"
-                            class="btn-primary-gradient py-3 px-7 rounded-xl text-sm flex items-center gap-2">
-                            <i class="bi bi-shield-plus"></i>Start Screening
+                            class="btn-primary-gradient py-3.5 px-8 rounded-xl text-sm flex items-center gap-2 font-semibold">
+                            <i class="bi bi-shield-plus"></i> Mulai Skrining Sekarang
                         </a>
-                        <a href="#features" class="btn-outline-custom py-2.5 px-7 rounded-xl text-sm">
-                            Learn More
+                        <a href="#features" class="btn-outline-custom py-3 px-7 rounded-xl text-sm">
+                            Pelajari Lebih Lanjut
                         </a>
                     </div>
                 </div>
                 <div class="lg:col-span-6 xl:col-span-7 flex justify-center lg:justify-end animate-fade-in" style="animation-delay: 0.2s;">
-                    <div
-                        class="relative w-full max-w-[520px] lg:max-w-none lg:w-full xl:max-w-[640px] rounded-3xl overflow-hidden shadow-medium border border-white/80 animate-float">
+                    <div class="relative w-full max-w-[520px] lg:max-w-none xl:max-w-[640px] rounded-3xl overflow-hidden shadow-medium border border-white/80 animate-float">
                         <div class="absolute inset-0 bg-gradient-to-tr from-blue-600/10 to-transparent z-10 pointer-events-none"></div>
-                        <img src="/images/hero_illustration.png" alt="Brain Technology Medical AI"
+                        <img src="/images/hero_illustration.png" alt="NeuroCare AI - Deteksi Dini Alzheimer"
                             class="w-full h-auto object-cover">
                     </div>
                 </div>
@@ -81,46 +104,42 @@
     <!-- Features Section -->
     <section id="features" class="py-16 lg:py-20 bg-white/60 border-y border-slate-100">
         <div class="page-container-wide">
-            <div class="text-center mb-12 max-w-3xl mx-auto">
-                <span class="text-secondary-blue font-bold text-[11px] uppercase tracking-widest">Features</span>
-                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold mt-2.5 text-slate-900">Advanced Features for Alzheimer
-                    Prediction</h2>
-                <p class="text-slate-500 mt-3 text-sm lg:text-base leading-relaxed">A comprehensive, data-driven framework built to
-                    understand cognitive health risk profiles.</p>
+            <div class="text-center mb-12 max-w-3xl mx-auto scroll-animate">
+                <span class="text-secondary-blue font-bold text-[11px] uppercase tracking-widest">Fitur Utama</span>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold mt-2.5 text-slate-900">
+                    Dirancang untuk Kebutuhan Klinis
+                </h2>
+                <p class="text-slate-500 mt-3 text-sm lg:text-base leading-relaxed">
+                    Kerangka berbasis data yang komprehensif untuk memahami profil risiko kesehatan kognitif pasien.
+                </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left h-full">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
+                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left scroll-animate scroll-animate-delay-1">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
                         <i class="bi bi-robot"></i>
                     </div>
-                    <h4 class="text-lg font-bold mb-2 text-slate-900">AI Prediction</h4>
+                    <h4 class="text-lg font-bold mb-2 text-slate-900">Prediksi AI</h4>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Employs an optimized XGBoost classifier model evaluating multidimensional medical data to output
-                        clear probability ratings.
+                        Menggunakan klasifikator XGBoost teroptimasi yang mengevaluasi data medis multidimensi untuk menghasilkan penilaian probabilitas yang jelas.
                     </p>
                 </div>
-                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left h-full">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
+                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left scroll-animate scroll-animate-delay-2">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
                         <i class="bi bi-lightning-charge-fill"></i>
                     </div>
-                    <h4 class="text-lg font-bold mb-2 text-slate-900">Fast Screening</h4>
+                    <h4 class="text-lg font-bold mb-2 text-slate-900">Skrining Cepat</h4>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Complete our simplified 18-parameter form in under 3 minutes, producing instant and clear
-                        diagnostic risk summaries.
+                        Selesaikan form 22-parameter dalam under 3 menit, menghasilkan ringkasan risiko diagnostik yang instan dan jelas untuk tenaga kesehatan.
                     </p>
                 </div>
-                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left h-full">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
+                <div class="glass-card p-7 lg:p-8 rounded-2xl flex flex-col items-start text-left scroll-animate scroll-animate-delay-3">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 text-secondary-blue flex items-center justify-center text-xl mb-5">
                         <i class="bi bi-bar-chart-line-fill"></i>
                     </div>
-                    <h4 class="text-lg font-bold mb-2 text-slate-900">Importance Analysis</h4>
+                    <h4 class="text-lg font-bold mb-2 text-slate-900">Analisis Faktor Risiko</h4>
                     <p class="text-slate-500 text-sm leading-relaxed">
-                        Highlights primary risk drivers like cognitive scores (MMSE), functional skills (ADL), and sleep
-                        quality indicators.
+                        Menyoroti pendorong risiko utama seperti skor MMSE, ADL, riwayat keluarga, dan kualitas tidur secara terstruktur.
                     </p>
                 </div>
             </div>
@@ -130,38 +149,37 @@
     <!-- Statistics Section -->
     <section class="py-16 lg:py-20">
         <div class="page-container-wide">
-            <div class="bg-slate-950 text-white rounded-3xl p-8 md:p-10 lg:p-12 relative overflow-hidden">
+            <div class="bg-slate-950 text-white rounded-3xl p-8 md:p-10 lg:p-12 relative overflow-hidden scroll-animate">
                 <div class="absolute -top-1/2 -right-1/4 w-96 h-96 rounded-full bg-blue-500/10 blur-[80px]"></div>
                 <div class="absolute -bottom-1/2 -left-1/4 w-80 h-80 rounded-full bg-sky-400/10 blur-[80px]"></div>
 
                 <div class="relative z-10 flex flex-col xl:flex-row items-start xl:items-center justify-between gap-10">
                     <div class="w-full xl:w-1/4 text-left">
-                        <h3 class="text-xl md:text-2xl lg:text-3xl font-extrabold mb-3">Model Accuracy</h3>
+                        <h3 class="text-xl md:text-2xl lg:text-3xl font-extrabold mb-3">Akurasi Model</h3>
                         <p class="text-slate-400 text-sm lg:text-base leading-relaxed">
-                            Our model is validated against clinical databases using strict stratification matrices.
+                            Model kami divalidasi terhadap database klinis menggunakan stratifikasi ketat.
                         </p>
+                        <a href="/predict" class="inline-flex items-center gap-2 mt-4 text-sky-400 text-sm font-semibold hover:text-sky-300 transition">
+                            Coba Sekarang <i class="bi bi-arrow-right"></i>
+                        </a>
                     </div>
 
                     <div class="w-full xl:w-3/4 grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-                        <div class="text-center py-6 px-4 bg-slate-900/60 rounded-xl border border-slate-800/60">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sky-400">95.4%</div>
-                            <div class="text-slate-400 text-[11px] mt-1.5 font-semibold uppercase tracking-wide">
-                                Accuracy</div>
+                        <div class="text-center py-6 px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-sky-400 stat-counter" data-target="95.4" data-suffix="%">0%</div>
+                            <div class="text-slate-400 text-[11px] mt-2 font-semibold uppercase tracking-wide">Akurasi</div>
                         </div>
-                        <div class="text-center py-6 px-4 bg-slate-900/60 rounded-xl border border-slate-800/60">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sky-400">94.8%</div>
-                            <div class="text-slate-400 text-[11px] mt-1.5 font-semibold uppercase tracking-wide">
-                                Precision</div>
+                        <div class="text-center py-6 px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-sky-400 stat-counter" data-target="94.8" data-suffix="%">0%</div>
+                            <div class="text-slate-400 text-[11px] mt-2 font-semibold uppercase tracking-wide">Presisi</div>
                         </div>
-                        <div class="text-center py-6 px-4 bg-slate-900/60 rounded-xl border border-slate-800/60">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sky-400">93.9%</div>
-                            <div class="text-slate-400 text-[11px] mt-1.5 font-semibold uppercase tracking-wide">Recall
-                            </div>
+                        <div class="text-center py-6 px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-sky-400 stat-counter" data-target="93.9" data-suffix="%">0%</div>
+                            <div class="text-slate-400 text-[11px] mt-2 font-semibold uppercase tracking-wide">Recall</div>
                         </div>
-                        <div class="text-center py-6 px-4 bg-slate-900/60 rounded-xl border border-slate-800/60">
-                            <div class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sky-400">94.3%</div>
-                            <div class="text-slate-400 text-[11px] mt-1.5 font-semibold uppercase tracking-wide">
-                                F1-Score</div>
+                        <div class="text-center py-6 px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition">
+                            <div class="text-3xl sm:text-4xl font-extrabold text-sky-400 stat-counter" data-target="94.3" data-suffix="%">0%</div>
+                            <div class="text-slate-400 text-[11px] mt-2 font-semibold uppercase tracking-wide">F1-Score</div>
                         </div>
                     </div>
                 </div>
@@ -169,94 +187,146 @@
         </div>
     </section>
 
+    <!-- How It Works Section -->
+    <section class="py-16 lg:py-20 bg-white/50 border-y border-slate-100">
+        <div class="page-container-wide">
+            <div class="text-center mb-12 max-w-3xl mx-auto scroll-animate">
+                <span class="text-secondary-blue font-bold text-[11px] uppercase tracking-widest">Cara Kerja</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold mt-2.5 text-slate-900">Tiga Langkah Mudah</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+                <!-- connector line desktop -->
+                <div class="hidden md:block absolute top-8 left-1/4 right-1/4 h-px bg-slate-200 z-0"></div>
+
+                <div class="flex flex-col items-center text-center scroll-animate scroll-animate-delay-1">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary-blue text-white flex items-center justify-center text-2xl mb-4 shadow-glow z-10">
+                        <i class="bi bi-clipboard2-pulse-fill"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 mb-2">1. Isi Form Klinis</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">Masukkan 22 parameter klinis, kognitif, dan gaya hidup pasien melalui form 4 langkah yang terstruktur.</p>
+                </div>
+                <div class="flex flex-col items-center text-center scroll-animate scroll-animate-delay-2">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary-blue text-white flex items-center justify-center text-2xl mb-4 shadow-glow z-10">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 mb-2">2. Analisis AI</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">Model XGBoost memproses 150+ decision trees untuk menghasilkan skor probabilitas risiko yang akurat.</p>
+                </div>
+                <div class="flex flex-col items-center text-center scroll-animate scroll-animate-delay-3">
+                    <div class="w-16 h-16 rounded-2xl bg-secondary-blue text-white flex items-center justify-center text-2xl mb-4 shadow-glow z-10">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-800 mb-2">3. Hasil & Rekomendasi</h4>
+                    <p class="text-slate-500 text-sm leading-relaxed">Dapatkan laporan risiko terperinci dengan breakdown faktor risiko dan rekomendasi tindak lanjut klinis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About Section -->
-    <section id="about" class="py-16 lg:py-20 bg-slate-50/80">
+    <section id="about" class="py-16 lg:py-20">
         <div class="page-container-wide">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 xl:gap-16 items-start">
-                <div class="text-left">
-                    <span class="text-secondary-blue font-bold text-[11px] uppercase tracking-widest">About</span>
-                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2.5 mb-5">NeuroCare AI Screening
-                        Tool</h2>
+                <div class="text-left scroll-animate">
+                    <span class="text-secondary-blue font-bold text-[11px] uppercase tracking-widest">Tentang</span>
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mt-2.5 mb-5">
+                        NeuroCare AI Screening Tool
+                    </h2>
                     <p class="text-slate-500 mb-4 text-sm lg:text-base leading-relaxed">
-                        Alzheimer's disease is a progressive neurodegenerative disorder that accounts for 60-80% of
-                        dementia cases. Early detection provides patients and families with a crucial timeline to adjust
-                        lifestyle habits, coordinate clinical support, and access treatments that can delay cognitive
-                        decline.
+                        Alzheimer adalah gangguan neurodegeneratif progresif yang menyumbang 60-80% kasus demensia. Deteksi dini memberi pasien dan keluarga waktu berharga untuk menyesuaikan gaya hidup, koordinasi dukungan klinis, dan mengakses pengobatan yang dapat menunda penurunan kognitif.
                     </p>
                     <p class="text-slate-500 mb-6 text-sm lg:text-base leading-relaxed">
-                        NeuroCare AI bridges the gap between machine learning and healthcare. By evaluating
-                        demographics, lifestyle patterns, cardiovascular metrics, and cognitive assessments, our tool
-                        highlights potential risk signals before symptoms escalate.
+                        NeuroCare AI menjembatani kesenjangan antara machine learning dan layanan kesehatan. Dengan mengevaluasi demografi, pola gaya hidup, metrik kardiovaskular, dan penilaian kognitif, alat ini menyoroti sinyal risiko potensial sebelum gejala memburuk.
                     </p>
 
-                    <div class="border-l-4 border-secondary-blue bg-sky-50/70 p-5 lg:p-6 rounded-r-xl">
+                    <div class="border-l-4 border-amber-400 bg-amber-50/70 p-5 lg:p-6 rounded-r-xl">
                         <div class="flex items-center gap-2 font-bold text-slate-800 text-sm mb-1.5">
-                            <i class="bi bi-exclamation-triangle-fill text-secondary-blue text-sm"></i> Medical
-                            Disclaimer
+                            <i class="bi bi-exclamation-triangle-fill text-amber-500 text-sm"></i> Disclaimer Medis
                         </div>
                         <p class="text-slate-500 text-xs lg:text-sm leading-relaxed">
-                            This screening system is powered by standard machine learning models intended for
-                            educational and early screening reference. It is NOT a replacement for professional medical
-                            diagnosis.
+                            Sistem skrining ini menggunakan model machine learning standar yang ditujukan untuk referensi skrining awal. <strong>Ini bukan pengganti</strong> diagnosis medis profesional. Selalu konsultasikan hasil dengan dokter.
                         </p>
                     </div>
                 </div>
 
-                <div class="space-y-3 lg:space-y-4">
+                <div class="space-y-3 lg:space-y-4 scroll-animate scroll-animate-delay-1">
                     <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden" open>
-                        <summary
-                            class="flex items-center justify-between p-5 lg:p-6 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
-                            Why XGBoost Algorithm?
+                        <summary class="flex items-center justify-between p-5 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
+                            Mengapa Algoritma XGBoost?
                             <span class="transition group-open:rotate-180 text-slate-400">
-                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
                                     <path d="M6 9l6 6 6-6"></path>
                                 </svg>
                             </span>
                         </summary>
-                        <div class="px-5 lg:px-6 pb-5 lg:pb-6 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
-                            XGBoost (Extreme Gradient Boosting) is a powerful tree-boosting algorithm renowned for
-                            handling tabular medical datasets. It manages correlation across clinical variables, handles
-                            outliers effectively, and produces highly interpretable results for feature importance.
+                        <div class="px-5 pb-5 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
+                            XGBoost (Extreme Gradient Boosting) adalah algoritma tree-boosting yang andal untuk dataset medis tabular. Ia mengelola korelasi antar variabel klinis, menangani outlier secara efektif, dan menghasilkan hasil yang sangat dapat diinterpretasi melalui feature importance.
                         </div>
                     </details>
 
                     <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                        <summary
-                            class="flex items-center justify-between p-5 lg:p-6 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
-                            What are the 18 evaluated parameters?
+                        <summary class="flex items-center justify-between p-5 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
+                            Apa saja 22 parameter yang dievaluasi?
                             <span class="transition group-open:rotate-180 text-slate-400">
-                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
                                     <path d="M6 9l6 6 6-6"></path>
                                 </svg>
                             </span>
                         </summary>
-                        <div class="px-5 lg:px-6 pb-5 lg:pb-6 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
-                            The model evaluates: Age, Gender, BMI, Physical Activity, Sleep Quality, Diet Quality,
-                            Smoking, Alcohol, Diabetes, Hypertension, Cardiovascular Disease, Depression, Head Injury,
-                            Family History of Alzheimer's, MMSE score, ADL score, Functional Assessments, and subjective
-                            Memory Complaints.
+                        <div class="px-5 pb-5 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
+                            Model mengevaluasi: Usia, Gender, BMI, Aktivitas Fisik, Kualitas Tidur, Kualitas Diet, Merokok, Alkohol, Diabetes, Hipertensi, Penyakit Kardiovaskular, Depresi, Cedera Kepala, Riwayat Keluarga Alzheimer, Skor MMSE, Skor ADL, Penilaian Fungsional, Keluhan Memori, Masalah Perilaku, Tekanan Sistolik, Tekanan Diastolik, dan Kolesterol Total.
                         </div>
                     </details>
 
                     <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                        <summary
-                            class="flex items-center justify-between p-5 lg:p-6 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
-                            How is risk score calculated?
+                        <summary class="flex items-center justify-between p-5 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
+                            Bagaimana skor risiko dihitung?
                             <span class="transition group-open:rotate-180 text-slate-400">
-                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round"
-                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
                                     <path d="M6 9l6 6 6-6"></path>
                                 </svg>
                             </span>
                         </summary>
-                        <div class="px-5 lg:px-6 pb-5 lg:pb-6 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
-                            The risk scoring calculates a probability indicator using a weighted model matrix based on
-                            feature importance findings. Parameters like low MMSE, poor ADL, genetic family history, and
-                            poor lifestyle habits accumulate risk scores.
+                        <div class="px-5 pb-5 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
+                            Skor risiko dihitung menggunakan matriks probabilitas berbobot berdasarkan temuan feature importance. Parameter seperti skor MMSE rendah, ADL buruk, riwayat keluarga genetik, dan kebiasaan gaya hidup tidak sehat mengakumulasi skor risiko lebih tinggi.
                         </div>
                     </details>
+
+                    <details class="group bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <summary class="flex items-center justify-between p-5 font-bold text-sm text-slate-900 cursor-pointer list-none hover:bg-slate-50 transition">
+                            Apakah data pasien aman?
+                            <span class="transition group-open:rotate-180 text-slate-400">
+                                <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" width="20">
+                                    <path d="M6 9l6 6 6-6"></path>
+                                </svg>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 border-t border-slate-100 pt-4 text-slate-500 text-sm leading-relaxed">
+                            Data pasien diproses secara lokal pada server Anda dan disimpan di database MySQL lokal. Tidak ada data yang dikirim ke server eksternal. Sistem ini dirancang untuk penggunaan internal di fasilitas kesehatan.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 lg:py-20">
+        <div class="page-container-wide">
+            <div class="bg-gradient-to-r from-primary-blue to-secondary-blue rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden">
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute -top-16 -right-16 w-64 h-64 bg-white rounded-full"></div>
+                    <div class="absolute -bottom-16 -left-16 w-80 h-80 bg-white rounded-full"></div>
+                </div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold mb-4">Mulai Skrining Pasien Sekarang</h2>
+                    <p class="text-blue-100 text-sm lg:text-base max-w-2xl mx-auto mb-8">
+                        Bantu pasien mendapatkan deteksi dini yang mereka butuhkan. Form skrining kami dirancang untuk efisiensi tenaga kesehatan dalam lingkungan klinis.
+                    </p>
+                    <a href="/predict"
+                        class="inline-flex items-center gap-2 bg-white text-secondary-blue font-bold py-3.5 px-8 rounded-xl text-sm hover:bg-blue-50 transition shadow-lg">
+                        <i class="bi bi-shield-plus text-lg"></i> Mulai Skrining Gratis
+                    </a>
                 </div>
             </div>
         </div>
@@ -271,16 +341,16 @@
                         <i class="bi bi-activity text-sky-400"></i> NeuroCare AI
                     </a>
                     <p class="text-slate-400 text-sm max-w-sm leading-relaxed">
-                        Early detection systems utilizing modern artificial intelligence to advance healthcare outcomes.
+                        Sistem deteksi dini menggunakan kecerdasan buatan modern untuk meningkatkan hasil layanan kesehatan.
                     </p>
                 </div>
                 <div>
-                    <h5 class="text-white font-bold text-sm mb-3">Links</h5>
+                    <h5 class="text-white font-bold text-sm mb-3">Navigasi</h5>
                     <ul class="space-y-2 text-sm">
                         <li><a href="/" class="hover:text-white transition-all">Home</a></li>
-                        <li><a href="/predict" class="hover:text-white transition-all">Screening Form</a></li>
+                        <li><a href="/predict" class="hover:text-white transition-all">Form Skrining</a></li>
                         <li><a href="/database" class="hover:text-white transition-all">Riwayat Prediksi</a></li>
-                        <li><a href="#about" class="hover:text-white transition-all">About Dataset</a></li>
+                        <li><a href="#about" class="hover:text-white transition-all">Tentang Dataset</a></li>
                     </ul>
                 </div>
                 <div>
@@ -291,11 +361,12 @@
             </div>
             <hr class="border-slate-800 mb-6">
             <div class="text-center text-slate-500 text-xs">
-                &copy; 2026 NeuroCare AI. All Rights Reserved. Created by Kelompok APM - Universitas Andalas.
+                &copy; 2026 NeuroCare AI. All Rights Reserved. Kelompok APM — Universitas Andalas.
             </div>
         </div>
     </footer>
 
+    <script src="/js/main.js"></script>
 </body>
 
 </html>
