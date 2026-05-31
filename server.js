@@ -8,7 +8,9 @@ const {
     savePredictionSession,
     getDatasetStats,
     getPredictionLogs,
-    getPredictionSummary
+    getPredictionSummary,
+    getPredictionLogById,
+    mapRecordToResultView
 } = require('./config/patientRepository');
 
 const app = express();
@@ -227,6 +229,46 @@ app.get('/database', async (req, res) => {
             records,
             total,
             totalPages
+        });
+    } catch (error) {
+        res.status(500).render('error', {
+            error: 'Database tidak tersedia',
+            message: error.message,
+            details: 'Pastikan MySQL XAMPP sudah berjalan dan database neurocare_ai sudah di-setup.'
+        });
+    }
+});
+
+// Detail hasil prediksi dari riwayat
+app.get('/database/:id', async (req, res) => {
+    try {
+        const logId = parseInt(req.params.id, 10);
+        if (Number.isNaN(logId) || logId < 1) {
+            return res.redirect('/database');
+        }
+
+        const record = await getPredictionLogById(logId);
+        if (!record) {
+            return res.status(404).render('error', {
+                error: 'Prediksi tidak ditemukan',
+                message: `Riwayat prediksi #${logId} tidak ada di database.`,
+                details: 'Data mungkin telah dihapus atau ID tidak valid.'
+            });
+        }
+
+        const viewData = mapRecordToResultView(record);
+        if (!viewData) {
+            return res.status(404).render('error', {
+                error: 'Data pasien tidak tersedia',
+                message: `Data klinis untuk prediksi #${logId} tidak ditemukan.`,
+                details: 'Record pasien terkait mungkin sudah dihapus dari database.'
+            });
+        }
+
+        const returnPage = Math.max(1, parseInt(req.query.page, 10) || 1);
+        res.render('result', {
+            ...viewData,
+            returnPage
         });
     } catch (error) {
         res.status(500).render('error', {

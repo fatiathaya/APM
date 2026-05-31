@@ -645,8 +645,39 @@
     @apply bg-blue-50/30;
   }
 
+  .data-table tbody tr.history-row {
+    @apply cursor-pointer;
+  }
+
+  .data-table tbody tr.history-row:hover {
+    @apply bg-blue-50;
+  }
+
+  .data-table tbody tr.history-row:active {
+    @apply bg-blue-100;
+  }
+
   .data-table tbody td {
     @apply px-4 py-3 text-sm;
+  }
+
+  .data-table col.col-detail-width {
+    width: 80px;
+  }
+
+  .data-table th.col-detail,
+  .data-table td.col-detail {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .data-table .detail-action-btn {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-lg text-secondary-blue bg-blue-50 border border-blue-100 hover:bg-blue-100 transition no-underline mx-auto;
   }
 
   /* ============================================

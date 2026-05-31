@@ -191,6 +191,75 @@ async function getPredictionSummary() {
     return rows[0];
 }
 
+async function getPredictionLogById(id) {
+    const [rows] = await pool.query(
+        `SELECT pl.id, pl.patient_record_id, pl.model_prediction, pl.probability,
+                pl.probability_percentage, pl.is_high_risk, pl.status_text, pl.created_at,
+                pr.age, pr.gender, pr.bmi, pr.smoking, pr.alcohol_consumption,
+                pr.physical_activity, pr.diet_quality, pr.sleep_quality,
+                pr.family_history_alzheimers, pr.cardiovascular_disease,
+                pr.diabetes, pr.depression, pr.head_injury, pr.hypertension,
+                pr.systolic_bp, pr.diastolic_bp, pr.cholesterol_total,
+                pr.mmse, pr.functional_assessment, pr.memory_complaints,
+                pr.behavioral_problems, pr.adl
+         FROM prediction_logs pl
+         LEFT JOIN patient_records pr ON pr.id = pl.patient_record_id
+         WHERE pl.id = ?`,
+        [id]
+    );
+    return rows[0] || null;
+}
+
+function mapRecordToResultView(record) {
+    if (!record || record.age == null) {
+        return null;
+    }
+
+    const isHighRisk = !!record.is_high_risk;
+    const probability = Number(record.probability);
+    const probability_percentage = Number(record.probability_percentage);
+    const circumference = 596.9;
+    const dashoffset = circumference * (1 - probability);
+
+    return {
+        age: record.age,
+        gender: record.gender,
+        bmi: record.bmi,
+        physicalActivity: record.physical_activity,
+        sleepQuality: record.sleep_quality,
+        dietQuality: record.diet_quality,
+        smoking: record.smoking,
+        alcohol: record.alcohol_consumption,
+        diabetes: record.diabetes,
+        hypertension: record.hypertension,
+        cardiovascular: record.cardiovascular_disease,
+        depression: record.depression,
+        headInjury: record.head_injury,
+        familyHistory: record.family_history_alzheimers,
+        systolicBP: record.systolic_bp,
+        diastolicBP: record.diastolic_bp,
+        cholesterolTotal: record.cholesterol_total,
+        mmse: record.mmse,
+        adl: record.adl,
+        functionalAssessment: record.functional_assessment,
+        memoryComplaints: record.memory_complaints,
+        behavioralProblems: record.behavioral_problems,
+        probability,
+        probability_percentage,
+        isHighRisk,
+        statusText: record.status_text,
+        themeColor: isHighRisk ? 'var(--danger)' : 'var(--success)',
+        themeBg: isHighRisk ? 'var(--danger-light)' : 'var(--success-light)',
+        badgeClass: isHighRisk ? 'result-badge-high' : 'result-badge-low',
+        circumference,
+        dashoffset,
+        modelPrediction: record.model_prediction,
+        fromHistory: true,
+        historyId: record.id,
+        predictedAt: record.created_at
+    };
+}
+
 module.exports = {
     savePatientRecord,
     savePredictionLog,
@@ -199,6 +268,8 @@ module.exports = {
     getPatientRecords,
     getPredictionLogs,
     getPredictionSummary,
+    getPredictionLogById,
+    mapRecordToResultView,
     updateLearningState,
     getUnlearnedPatientRecords,
     markRecordsAsLearned,
